@@ -72,4 +72,9 @@ public class TimeInDay implements Comparable<TimeInDay> {
     public int compareTo(@NonNull TimeInDay o) {
         return millisTo(o);
     }
+
+    @Override
+    public String toString() {
+        return "TimeInDay{" + hour + ":" + minute + ":" + second + '}';
+    }
 }

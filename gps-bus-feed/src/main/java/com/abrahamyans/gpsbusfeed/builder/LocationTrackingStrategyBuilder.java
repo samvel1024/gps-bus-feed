@@ -1,14 +1,14 @@
 package com.abrahamyans.gpsbusfeed.builder;
 
 
-import com.abrahamyans.gpsbusfeed.time.RequestTimingStrategy;
+import com.abrahamyans.gpsbusfeed.time.RequestTiming;
 
 /**
  * @author Samvel Abrahamyan
  */
 public class LocationTrackingStrategyBuilder {
 
-    private RequestTimingStrategy locationRequestTimeStrategy;
+    private RequestTiming locationRequestTimeStrategy;
 
     public LocationTrackingStrategyBuilder(){
     }
