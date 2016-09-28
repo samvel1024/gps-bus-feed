@@ -1,12 +1,9 @@
 package com.abrahamyans.gpsbusfeed;
 
-import android.content.Context;
-
 import com.abrahamyans.gpsbusfeed.event.LocationAvailableEvent;
 import com.abrahamyans.gpsbusfeed.filter.LocationEventFilter;
 import com.abrahamyans.gpsbusfeed.location.DefaultLocationRequestFactory;
 import com.abrahamyans.gpsbusfeed.location.LocationRequestFactory;
-import com.abrahamyans.gpsbusfeed.preference.PreferenceManager;
 import com.abrahamyans.gpsbusfeed.scheduler.RequestDate;
 import com.abrahamyans.gpsbusfeed.scheduler.RequestTiming;
 import com.abrahamyans.gpsbusfeed.scheduler.SingleRequestTiming;
@@ -25,7 +22,10 @@ public class LocationTracker {
     private List<LocationEventFilter> filters;
     private RequestTiming timing;
     private LocationRequestFactory requestFactory;
-    private PreferenceManager preferenceManager;
+
+    private LocationTracker(){
+        super();
+    }
 
     public RequestDate getNextRequestDate(Date lastRequestDate){
         return timing.getNextLocationRequestDate(lastRequestDate);
@@ -42,30 +42,14 @@ public class LocationTracker {
         return isValid;
     }
 
-    public void startTracker(){
-        if(isTrackerEnabled())
-            throw new IllegalStateException("The tracker is already enabled, consider checking with isTrackerEnabled");
-        preferenceManager.setTrackingEnabled(true);
-    }
-
-    public void stopTracker(){
-        if(!isTrackerEnabled())
-            throw new IllegalStateException("The tracker is already disabled, consider checking with isTrackerEnabled");
-    }
-
-    public boolean isTrackerEnabled(){
-        return preferenceManager.isTrackingEnabled();
-    }
 
     public static class Builder {
 
         private RequestTiming timingStrategy;
         private List<LocationEventFilter> locationEventFilters = new ArrayList<>();
         private LocationRequestFactory requestFactory;
-        private Context context;
 
-        public Builder(Context context){
-            this.context = context;
+        public Builder(){
         }
 
         public Builder timingStrategy(RequestTiming timing){
@@ -82,7 +66,7 @@ public class LocationTracker {
             return this;
         }
 
-        private Builder requestFactory(LocationRequestFactory factory){
+        public Builder requestFactory(LocationRequestFactory factory){
             if (requestFactory == null)
                 throw new IllegalArgumentException("factory cannot be null");
             this.requestFactory = factory;
@@ -94,7 +78,6 @@ public class LocationTracker {
             locationTracker.filters = locationEventFilters;
             locationTracker.timing = timingStrategy == null ? new SingleRequestTiming() : timingStrategy;
             locationTracker.requestFactory = requestFactory == null ? new DefaultLocationRequestFactory() : requestFactory;
-            locationTracker.preferenceManager = new PreferenceManager(context);
             return locationTracker;
         }
     }

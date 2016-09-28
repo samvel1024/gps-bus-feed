@@ -14,6 +14,7 @@ import com.abrahamyans.gpsbusfeed.event.LocationAvailableEvent;
 import com.abrahamyans.gpsbusfeed.location.LocationApiListener;
 import com.abrahamyans.gpsbusfeed.location.LocationApiProvider;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.location.LocationRequest;
 
 import java.util.Date;
 
@@ -25,6 +26,7 @@ public class LocationService extends Service implements
 
     private static final String TAG = LocationService.class.getName();
     private final GpsBusFeed feed = GpsBusFeed.getInstance();
+    private final TrackerManager trackerManager = TrackerManager.getInstance(getApplicationContext());
 
     private LocationApiProvider apiProvider;
 
@@ -34,8 +36,8 @@ public class LocationService extends Service implements
     }
 
     private void requestLocation(){
-
-//        apiProvider.requestLocation(locationRequest, this);
+        LocationRequest locationRequest = trackerManager.getRunningTracker().createLocationRequest();
+        apiProvider.requestLocation(locationRequest);
     }
 
     @Override

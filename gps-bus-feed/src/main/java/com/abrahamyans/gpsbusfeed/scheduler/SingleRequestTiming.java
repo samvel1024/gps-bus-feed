@@ -9,8 +9,8 @@ import java.util.Date;
 public class SingleRequestTiming implements RequestTiming {
 
     @Override
-    public RequestDate getNextLocationRequestDate(Date lastUpdateDate) {
-        return lastUpdateDate == null ? RequestDate.IMMEDIATELY : RequestDate.NEVER;
+    public RequestDate getNextLocationRequestDate(Date lastRequestDate) {
+        return lastRequestDate == null ? RequestDate.IMMEDIATELY : RequestDate.NEVER;
     }
 
 }

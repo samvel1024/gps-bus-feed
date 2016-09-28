@@ -29,21 +29,21 @@ public class GpsBusFeed {
     }
 
     void onError(GpsBusFeedError error) {
-        bus.post(error);
+        postEventToMainThread(error);
     }
 
     void onLocationAvailable(LocationAvailableEvent event) {
-        postEventToBus(event);
+        postEventToMainThread(event);
     }
 
-    private void postEventToBus(final Object event) {
+    private void postEventToMainThread(final Object event) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             bus.post(event);
         } else {
             main.post(new Runnable() {
                 @Override
                 public void run() {
-                    postEventToBus(event);
+                    postEventToMainThread(event);
                 }
             });
         }

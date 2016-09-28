@@ -47,10 +47,10 @@ public class EqualIntervalTiming implements RequestTiming {
      * {@inheritDoc}
      */
     @Override
-    public RequestDate getNextLocationRequestDate(Date currentDate) {
-
+    public RequestDate getNextLocationRequestDate(Date lastRequestDate) {
+        lastRequestDate = lastRequestDate == null ? new Date(): lastRequestDate;
         Calendar cal = Calendar.getInstance();
-        cal.setTime(currentDate);
+        cal.setTime(lastRequestDate);
         cal.add(Calendar.MILLISECOND, deltaMillis);
 
         TimeInDay nextProposedTime = new TimeInDay(cal);
@@ -62,7 +62,7 @@ public class EqualIntervalTiming implements RequestTiming {
             return new RequestDate(cal.getTime());
 
         // Set to from
-        cal.setTime(currentDate);
+        cal.setTime(lastRequestDate);
         cal.add(Calendar.DAY_OF_MONTH, isMidnightIncluded ? 0 : 1);
         cal.set(Calendar.HOUR_OF_DAY, from.getHour());
         cal.set(Calendar.MINUTE, from.getMinute());

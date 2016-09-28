@@ -30,7 +30,7 @@ public class LocationApiProvider {
         }
     }
 
-    public void requestLocation(LocationRequest locationRequest, LocationApiListener listener){
+    public void requestLocation(LocationRequest locationRequest){
         try{
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     apiClient, locationRequest, listener);

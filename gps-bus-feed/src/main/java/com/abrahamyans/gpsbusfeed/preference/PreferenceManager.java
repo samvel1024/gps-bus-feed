@@ -26,6 +26,7 @@ public class PreferenceManager {
 
     public PreferenceManager(Context context) {
         this.prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        prefs.edit().clear().apply();
     }
 
     public synchronized Date getLastLocationRequestDate() {
@@ -33,7 +34,7 @@ public class PreferenceManager {
         try {
             return new SimpleDateFormat(DATE_FORMAT, Locale.US).parse(dateStr);
         } catch (ParseException e) {
-            throw new IllegalStateException("Cannot parse the date in preferences", e);
+            throw new IllegalStateException("Cannot parse the stored date", e);
         }
     }
 
@@ -48,5 +49,9 @@ public class PreferenceManager {
 
     public synchronized boolean isTrackingEnabled(){
         return prefs.getBoolean(PREF_TRACKING_ENABLED, false);
+    }
+
+    public void reset(){
+        prefs.edit().clear().apply();
     }
 }

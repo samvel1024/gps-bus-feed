@@ -6,5 +6,5 @@ import java.util.Date;
  * @author Samvel Abrahamyan
  */
 public interface RequestTiming {
-    RequestDate getNextLocationRequestDate(Date lastUpdateDate);
+    RequestDate getNextLocationRequestDate(Date lastRequestDate);
 }

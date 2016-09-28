@@ -44,10 +44,6 @@ public class TimeInDay implements Comparable<TimeInDay> {
         return new TimeInDay(23, 59, 59);
     }
 
-    private int secToMillis(int seconds) {
-        return seconds * 1000;
-    }
-
     public int getHour() {
         return hour;
     }
@@ -65,7 +61,7 @@ public class TimeInDay implements Comparable<TimeInDay> {
         int mDiff = this.minute - o.minute;
         int sDiff = this.second - o.second;
 
-        return secToMillis(3600 * (hDiff) + mDiff * 60 + sDiff);
+        return 1000 * (3600 * (hDiff) + mDiff * 60 + sDiff);
     }
 
     @Override
