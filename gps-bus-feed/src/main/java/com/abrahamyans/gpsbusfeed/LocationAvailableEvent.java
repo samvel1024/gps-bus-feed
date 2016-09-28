@@ -11,7 +11,7 @@ public class LocationAvailableEvent {
     private Date date;
     private Location location;
 
-    public LocationAvailableEvent(Date date, Location location) {
+    public LocationAvailableEvent(Location location, Date date) {
         this.date = date;
         this.location = location;
     }

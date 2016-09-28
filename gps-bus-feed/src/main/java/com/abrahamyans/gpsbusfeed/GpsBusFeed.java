@@ -1,9 +1,16 @@
 package com.abrahamyans.gpsbusfeed;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 
-import com.abrahamyans.gpsbusfeed.builder.LocationTrackingStrategyBuilder;
+import com.abrahamyans.gpsbusfeed.filter.LocationFilter;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 
@@ -18,6 +25,8 @@ public class GpsBusFeed{
 
     private final Handler main = new Handler(Looper.getMainLooper());
 
+    private LocationTrackingConfiguration currentConfig;
+
     private GpsBusFeed() {
         super();
     }
@@ -26,31 +35,64 @@ public class GpsBusFeed{
         return instance;
     }
 
-    void postEvent(final Object event) {
+    void onLocationAvailable(LocationAvailableEvent event){
+        boolean shouldPublish = true;
+        for(LocationFilter filter: currentConfig.getLocationFilters()) {
+            shouldPublish &= filter.shouldBroadcastLocation(event.getLocation());
+        }
+        if (shouldPublish) {
+            postEventToBus(event);
+        }
+    }
+
+    private void postEventToBus(final Object event) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             bus.post(event);
         } else {
             main.post(new Runnable() {
                 @Override
                 public void run() {
-                    postEvent(event);
+                    postEventToBus(event);
                 }
             });
         }
     }
 
-    public void getImmediateLocation(){
+    public void register(Object listener){
+        bus.register(listener);
+    }
 
+    public void unregister(Object listener){
+        bus.unregister(listener);
+    }
+
+    public void getImmediateLocation(Context ctx){
+        ctx.startService(new Intent(ctx, LocationService.class));
+    }
+
+    public void startTracker(LocationTrackingConfiguration config){
+        if (isTrackingEnabled())
+            throw new IllegalStateException("An instance of the tracker is already running, consider calling isTrackingEnabled before starting");
+        this.currentConfig = config;
     }
 
 
-    public void startLocationTracking(LocationTrackingStrategyBuilder strategyBuilder){
-
+    public void stopTracker(){
+        currentConfig = null;
     }
 
     public boolean isTrackingEnabled(){
-        return false;
+        return currentConfig == null;
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    public boolean isPermissionGranted(Context context){
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void requestPermissions(){
+
+    }
 
 }
