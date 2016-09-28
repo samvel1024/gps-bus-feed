@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 
+import com.abrahamyans.gpsbusfeed.error.GpsBusFeedError;
 import com.abrahamyans.gpsbusfeed.filter.LocationFilter;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
@@ -25,7 +26,7 @@ public class GpsBusFeed{
 
     private final Handler main = new Handler(Looper.getMainLooper());
 
-    private LocationTrackingConfiguration currentConfig;
+    private TrackerBuilder currentConfig;
 
     private GpsBusFeed() {
         super();
@@ -33,6 +34,10 @@ public class GpsBusFeed{
 
     public static GpsBusFeed getInstance() {
         return instance;
+    }
+
+    void onError(GpsBusFeedError error){
+        bus.post(error);
     }
 
     void onLocationAvailable(LocationAvailableEvent event){
@@ -66,14 +71,11 @@ public class GpsBusFeed{
         bus.unregister(listener);
     }
 
-    public void getImmediateLocation(Context ctx){
-        ctx.startService(new Intent(ctx, LocationService.class));
-    }
-
-    public void startTracker(LocationTrackingConfiguration config){
+    public void startTracker(Context context, TrackerBuilder config){
         if (isTrackingEnabled())
             throw new IllegalStateException("An instance of the tracker is already running, consider calling isTrackingEnabled before starting");
         this.currentConfig = config;
+        context.startService(new Intent(context, LocationService.class));
     }
 
 
@@ -82,17 +84,13 @@ public class GpsBusFeed{
     }
 
     public boolean isTrackingEnabled(){
-        return currentConfig == null;
+        return currentConfig != null;
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     public boolean isPermissionGranted(Context context){
         return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
-    }
-
-    public void requestPermissions(){
-
     }
 
 }

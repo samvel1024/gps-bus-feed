@@ -1,4 +1,4 @@
-package com.abrahamyans.gpsbusfeed.time;
+package com.abrahamyans.gpsbusfeed.scheduler;
 
 import junit.framework.Assert;
 
