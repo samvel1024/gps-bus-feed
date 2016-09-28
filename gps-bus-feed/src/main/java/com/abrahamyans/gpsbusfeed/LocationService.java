@@ -27,7 +27,7 @@ public class LocationService extends Service implements
     private static final String TAG = LocationService.class.getName();
     private final GpsBusFeed feed = GpsBusFeed.getInstance();
     private final TrackerManager trackerManager = TrackerManager.getInstance(getApplicationContext());
-
+    private final LocationTracker tracker = trackerManager.getRunningTracker();
     private LocationApiProvider apiProvider;
 
     private void disconnect() {
@@ -36,7 +36,7 @@ public class LocationService extends Service implements
     }
 
     private void requestLocation(){
-        LocationRequest locationRequest = trackerManager.getRunningTracker().createLocationRequest();
+        LocationRequest locationRequest = tracker.createLocationRequest();
         apiProvider.requestLocation(locationRequest);
     }
 
@@ -61,7 +61,10 @@ public class LocationService extends Service implements
     @Override
     public void onLocationChanged(Location location) {
         Log.d(TAG, "Received location " + location);
-        feed.onLocationAvailable(new LocationAvailableEvent(location, new Date()));
+        LocationAvailableEvent event = new LocationAvailableEvent(location, new Date());
+        if (tracker.isValidLocationEvent(event)) {
+            feed.onLocationAvailable(new LocationAvailableEvent(location, new Date()));
+        }
         disconnect();
     }
 

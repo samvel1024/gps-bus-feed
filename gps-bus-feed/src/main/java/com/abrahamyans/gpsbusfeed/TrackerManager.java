@@ -8,6 +8,8 @@ import com.abrahamyans.gpsbusfeed.event.GpsBusFeedError;
 import com.abrahamyans.gpsbusfeed.preference.PreferenceManager;
 import com.squareup.otto.Subscribe;
 
+import java.util.Date;
+
 /**
  * @author Samvel Abrahamyan
  */
@@ -24,7 +26,7 @@ public class TrackerManager {
         if(context instanceof Activity)
             throw new IllegalStateException("Do not pass instance of activity as context, use getApplicationContext");
         this.preferenceManager = new PreferenceManager(context);
-        GpsBusFeed.getInstance().register(new TrackerErrorListener());
+        GpsBusFeed.getInstance().register(new EventInterceptor());
     }
 
     public static TrackerManager getInstance(Context context){
@@ -54,13 +56,21 @@ public class TrackerManager {
         return preferenceManager.isTrackingEnabled();
     }
 
-    LocationTracker getRunningTracker(){
+    public Date getLastRequestDate(){
+        return preferenceManager.getLastLocationRequestDate();
+    }
+
+    public void saveNextRequestDate(Date date){
+        preferenceManager.updateLastLocationRequestDate(date);
+    }
+
+    public LocationTracker getRunningTracker(){
         if (tracker == null)
             throw new IllegalStateException("Requested tracker instance but none is running currently");
         return tracker;
     }
 
-    private static class TrackerErrorListener{
+    private static class EventInterceptor {
 
         @Subscribe
         public void onError(GpsBusFeedError err){
