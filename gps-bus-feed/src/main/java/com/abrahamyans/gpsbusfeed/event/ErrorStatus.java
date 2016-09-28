@@ -1,4 +1,4 @@
-package com.abrahamyans.gpsbusfeed.error;
+package com.abrahamyans.gpsbusfeed.event;
 
 /**
  * @author Samvel Abrahamyan

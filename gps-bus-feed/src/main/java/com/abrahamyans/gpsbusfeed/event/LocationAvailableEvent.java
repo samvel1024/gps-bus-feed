@@ -1,4 +1,4 @@
-package com.abrahamyans.gpsbusfeed;
+package com.abrahamyans.gpsbusfeed.event;
 
 import android.location.Location;
 

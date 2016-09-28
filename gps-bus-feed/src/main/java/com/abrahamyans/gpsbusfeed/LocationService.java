@@ -8,8 +8,9 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.abrahamyans.gpsbusfeed.error.ErrorStatus;
-import com.abrahamyans.gpsbusfeed.error.GpsBusFeedError;
+import com.abrahamyans.gpsbusfeed.event.ErrorStatus;
+import com.abrahamyans.gpsbusfeed.event.GpsBusFeedError;
+import com.abrahamyans.gpsbusfeed.event.LocationAvailableEvent;
 import com.abrahamyans.gpsbusfeed.location.LocationApiListener;
 import com.abrahamyans.gpsbusfeed.location.LocationApiProvider;
 import com.google.android.gms.common.ConnectionResult;
@@ -24,6 +25,7 @@ public class LocationService extends Service implements
 
     private static final String TAG = LocationService.class.getName();
     private final GpsBusFeed feed = GpsBusFeed.getInstance();
+
     private LocationApiProvider apiProvider;
 
     private void disconnect() {

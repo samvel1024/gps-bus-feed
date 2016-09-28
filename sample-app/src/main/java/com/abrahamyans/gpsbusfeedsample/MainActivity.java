@@ -7,7 +7,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abrahamyans.gpsbusfeed.GpsBusFeed;
-import com.abrahamyans.gpsbusfeed.LocationAvailableEvent;
+import com.abrahamyans.gpsbusfeed.event.LocationAvailableEvent;
 import com.abrahamyans.gpsbusfeed.TrackerBuilder;
 import com.squareup.otto.Subscribe;
 
