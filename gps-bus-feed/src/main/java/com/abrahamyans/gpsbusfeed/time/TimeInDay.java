@@ -1,4 +1,4 @@
-package com.abrahamyans.gpsbusfeed.scheduler;
+package com.abrahamyans.gpsbusfeed.time;
 
 import android.support.annotation.NonNull;
 

@@ -27,7 +27,7 @@ public class RequestDate {
 
     public Date getDate(){
         if (date == null)
-            throw new IllegalStateException("cannot access null date");
+            throw new IllegalStateException("Cannot access null date");
         return date;
     }
 }

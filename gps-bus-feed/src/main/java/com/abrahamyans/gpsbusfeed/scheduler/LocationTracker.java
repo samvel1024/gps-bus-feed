@@ -1,12 +1,11 @@
-package com.abrahamyans.gpsbusfeed;
+package com.abrahamyans.gpsbusfeed.scheduler;
 
 import com.abrahamyans.gpsbusfeed.event.LocationAvailableEvent;
 import com.abrahamyans.gpsbusfeed.filter.LocationEventFilter;
 import com.abrahamyans.gpsbusfeed.location.DefaultLocationRequestFactory;
 import com.abrahamyans.gpsbusfeed.location.LocationRequestFactory;
-import com.abrahamyans.gpsbusfeed.scheduler.RequestDate;
-import com.abrahamyans.gpsbusfeed.scheduler.RequestTiming;
-import com.abrahamyans.gpsbusfeed.scheduler.SingleRequestTiming;
+import com.abrahamyans.gpsbusfeed.time.RequestTiming;
+import com.abrahamyans.gpsbusfeed.time.SingleRequestTiming;
 import com.google.android.gms.location.LocationRequest;
 
 import java.util.ArrayList;
@@ -42,6 +41,9 @@ public class LocationTracker {
         return isValid;
     }
 
+    public static Builder builder(){
+        return new Builder();
+    }
 
     public static class Builder {
 
@@ -49,12 +51,13 @@ public class LocationTracker {
         private List<LocationEventFilter> locationEventFilters = new ArrayList<>();
         private LocationRequestFactory requestFactory;
 
-        public Builder(){
+        Builder(){
         }
 
         public Builder timingStrategy(RequestTiming timing){
             if (timing == null)
                 throw new IllegalArgumentException("timing cannot be null");
+            verifyIsNotOverridden(this.timingStrategy, "timingStrategy");
             this.timingStrategy = timing;
             return this;
         }
@@ -69,15 +72,21 @@ public class LocationTracker {
         public Builder requestFactory(LocationRequestFactory factory){
             if (requestFactory == null)
                 throw new IllegalArgumentException("factory cannot be null");
+            verifyIsNotOverridden(this.requestFactory, "requestFactory");
             this.requestFactory = factory;
             return this;
+        }
+
+        private void verifyIsNotOverridden(Object val, String field){
+            if (val != null)
+                throw new IllegalStateException("Field " + field + " is already set");
         }
 
         public LocationTracker build(){
             LocationTracker locationTracker = new LocationTracker();
             locationTracker.filters = locationEventFilters;
-            locationTracker.timing = timingStrategy == null ? new SingleRequestTiming() : timingStrategy;
-            locationTracker.requestFactory = requestFactory == null ? new DefaultLocationRequestFactory() : requestFactory;
+            locationTracker.timing = timingStrategy == null ? SingleRequestTiming.create() : timingStrategy;
+            locationTracker.requestFactory = requestFactory == null ? DefaultLocationRequestFactory.create() : requestFactory;
             return locationTracker;
         }
     }

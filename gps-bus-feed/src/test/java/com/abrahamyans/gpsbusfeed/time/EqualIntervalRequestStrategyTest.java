@@ -1,4 +1,6 @@
-package com.abrahamyans.gpsbusfeed.scheduler;
+package com.abrahamyans.gpsbusfeed.time;
+
+import com.abrahamyans.gpsbusfeed.scheduler.RequestDate;
 
 import junit.framework.Assert;
 
@@ -23,12 +25,12 @@ public class EqualIntervalRequestStrategyTest {
 
         Date curr = composeDate(2016, 9, 26, 16, 0, 0);
 
-        Date next = strategy.getNextLocationRequestDate(curr);
+        RequestDate next = strategy.getNextLocationRequestDate(curr);
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(curr);
         cal.add(Calendar.MILLISECOND, 3000);
-        Assert.assertEquals(next, cal.getTime());
+        Assert.assertEquals(next.getDate(), cal.getTime());
     }
 
     @Test
@@ -41,9 +43,9 @@ public class EqualIntervalRequestStrategyTest {
 
         Date curr = composeDate(2016, 9, 26, 22, 0, 0);
 
-        Date next = strategy.getNextLocationRequestDate(curr);
+        RequestDate next = strategy.getNextLocationRequestDate(curr);
 
-        Calendar nextCal = fromDate(next);
+        Calendar nextCal = fromDate(next.getDate());
         Assert.assertEquals(2016, nextCal.get(Calendar.YEAR));
         Assert.assertEquals(9, nextCal.get(Calendar.MONTH));
         Assert.assertEquals(27, nextCal.get(Calendar.DAY_OF_MONTH));
@@ -61,9 +63,9 @@ public class EqualIntervalRequestStrategyTest {
 
         Date curr = composeDate(2016, 9, 26, 16, 0, 0);
 
-        Date next = strategy.getNextLocationRequestDate(curr);
+        RequestDate next = strategy.getNextLocationRequestDate(curr);
 
-        Calendar nextCal = fromDate(next);
+        Calendar nextCal = fromDate(next.getDate());
         Assert.assertEquals(2016, nextCal.get(Calendar.YEAR));
         Assert.assertEquals(9, nextCal.get(Calendar.MONTH));
         Assert.assertEquals(26, nextCal.get(Calendar.DAY_OF_MONTH));
@@ -83,9 +85,9 @@ public class EqualIntervalRequestStrategyTest {
 
         Date curr = composeDate(2016, 9, 26, 2, 0, 0);
 
-        Date next = strategy.getNextLocationRequestDate(curr);
+        RequestDate next = strategy.getNextLocationRequestDate(curr);
 
-        Calendar nextCal = fromDate(next);
+        Calendar nextCal = fromDate(next.getDate());
         Assert.assertEquals(2016, nextCal.get(Calendar.YEAR));
         Assert.assertEquals(9, nextCal.get(Calendar.MONTH));
         Assert.assertEquals(26, nextCal.get(Calendar.DAY_OF_MONTH));

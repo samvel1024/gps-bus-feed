@@ -1,10 +1,8 @@
-package com.abrahamyans.gpsbusfeed;
+package com.abrahamyans.gpsbusfeed.event;
 
 import android.os.Handler;
 import android.os.Looper;
 
-import com.abrahamyans.gpsbusfeed.event.GpsBusFeedError;
-import com.abrahamyans.gpsbusfeed.event.LocationAvailableEvent;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 
@@ -28,11 +26,11 @@ public class GpsBusFeed {
         return instance;
     }
 
-    void onError(GpsBusFeedError error) {
+    public void onError(GpsBusFeedErrorEvent error) {
         postEventToMainThread(error);
     }
 
-    void onLocationAvailable(LocationAvailableEvent event) {
+    public void onLocationAvailable(LocationAvailableEvent event) {
         postEventToMainThread(event);
     }
 

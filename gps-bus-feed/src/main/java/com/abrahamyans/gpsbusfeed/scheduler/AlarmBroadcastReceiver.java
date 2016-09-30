@@ -6,9 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.abrahamyans.gpsbusfeed.LocationTracker;
-import com.abrahamyans.gpsbusfeed.TrackerManager;
-
 /**
  * @author Samvel Abrahamyan
  */
@@ -30,7 +27,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         if (!trackerManager.isTrackerEnabled())
             alarmManager.cancel(pendingIntent);
 
-        RequestDate nextRequestDate = runningTracker.getNextRequestDate(trackerManager.getLastRequestDate());
+        RequestDate nextRequestDate = runningTracker.getNextRequestDate(trackerManager.getLastLocationRequestDate());
         if (nextRequestDate.isDatePresent()){
             alarmManager.set(AlarmManager.RTC_WAKEUP,
                     nextRequestDate.getDate().getTime(),

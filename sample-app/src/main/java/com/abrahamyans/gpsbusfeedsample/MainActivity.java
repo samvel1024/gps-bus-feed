@@ -5,13 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.abrahamyans.gpsbusfeed.GpsBusFeed;
-import com.abrahamyans.gpsbusfeed.LocationTracker;
-import com.abrahamyans.gpsbusfeed.TrackerManager;
+import com.abrahamyans.gpsbusfeed.event.GpsBusFeed;
+import com.abrahamyans.gpsbusfeed.scheduler.LocationTracker;
+import com.abrahamyans.gpsbusfeed.scheduler.TrackerManager;
 import com.abrahamyans.gpsbusfeed.event.LocationAvailableEvent;
 import com.abrahamyans.gpsbusfeed.filter.LocationAccuracyEventFilter;
 import com.abrahamyans.gpsbusfeed.location.DefaultLocationRequestFactory;
-import com.abrahamyans.gpsbusfeed.scheduler.SingleRequestTiming;
+import com.abrahamyans.gpsbusfeed.time.SingleRequestTiming;
 import com.squareup.otto.Subscribe;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,16 +39,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onRequestLocation(View view) {
-        if (trackerManager.isTrackerEnabled()) {
+        if (!trackerManager.isTrackerEnabled()) {
             trackerManager.startTracker(
-                    new LocationTracker.Builder()
-                            .timingStrategy(new SingleRequestTiming())
-                            .filter(new LocationAccuracyEventFilter(500F))
-                            .requestFactory(new DefaultLocationRequestFactory())
+                    LocationTracker.builder()
+                            .timingStrategy(SingleRequestTiming.create())
+                            .filter(LocationAccuracyEventFilter.withMaxRadius(500F))
+                            .requestFactory(DefaultLocationRequestFactory.create())
                             .build()
             );
         }
-
     }
 
     @Subscribe

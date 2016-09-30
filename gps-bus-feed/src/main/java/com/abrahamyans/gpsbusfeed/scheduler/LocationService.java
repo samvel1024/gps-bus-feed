@@ -1,4 +1,4 @@
-package com.abrahamyans.gpsbusfeed;
+package com.abrahamyans.gpsbusfeed.scheduler;
 
 import android.app.Service;
 import android.content.Intent;
@@ -9,7 +9,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.abrahamyans.gpsbusfeed.event.ErrorStatus;
-import com.abrahamyans.gpsbusfeed.event.GpsBusFeedError;
+import com.abrahamyans.gpsbusfeed.event.GpsBusFeed;
+import com.abrahamyans.gpsbusfeed.event.GpsBusFeedErrorEvent;
 import com.abrahamyans.gpsbusfeed.event.LocationAvailableEvent;
 import com.abrahamyans.gpsbusfeed.location.LocationApiListener;
 import com.abrahamyans.gpsbusfeed.location.LocationApiProvider;
@@ -28,7 +29,7 @@ public class LocationService extends Service implements
     private final GpsBusFeed feed = GpsBusFeed.getInstance();
     private final TrackerManager trackerManager = TrackerManager.getInstance(getApplicationContext());
     private final LocationTracker tracker = trackerManager.getRunningTracker();
-    private LocationApiProvider apiProvider;
+    private final LocationApiProvider apiProvider = new LocationApiProvider(this, this.getBaseContext());
 
     private void disconnect() {
         stopSelf();
@@ -38,12 +39,6 @@ public class LocationService extends Service implements
     private void requestLocation(){
         LocationRequest locationRequest = tracker.createLocationRequest();
         apiProvider.requestLocation(locationRequest);
-    }
-
-    @Override
-    public void onCreate() {
-        apiProvider = new LocationApiProvider(this, this.getBaseContext());
-        super.onCreate();
     }
 
     @Override
@@ -80,13 +75,13 @@ public class LocationService extends Service implements
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        feed.onError(new GpsBusFeedError(ErrorStatus.API_CONNECTION_FAILURE));
+        feed.onError(new GpsBusFeedErrorEvent(ErrorStatus.API_CONNECTION_FAILURE));
         disconnect();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        feed.onError(new GpsBusFeedError(ErrorStatus.API_CONNECTION_FAILURE, "Connection was suspended"));
+        feed.onError(new GpsBusFeedErrorEvent(ErrorStatus.API_CONNECTION_FAILURE, "Connection was suspended"));
         Log.e(TAG, "Connection has been suspended");
     }
 }

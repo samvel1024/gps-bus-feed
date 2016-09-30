@@ -1,4 +1,6 @@
-package com.abrahamyans.gpsbusfeed.scheduler;
+package com.abrahamyans.gpsbusfeed.time;
+
+import com.abrahamyans.gpsbusfeed.scheduler.RequestDate;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -19,7 +21,7 @@ public class EqualIntervalTiming implements RequestTiming {
      * @param to end time
      * @param deltaMillis the amount of time between location requests in millis
      */
-    public EqualIntervalTiming(TimeInDay from, TimeInDay to, int deltaMillis) {
+    EqualIntervalTiming(TimeInDay from, TimeInDay to, int deltaMillis) {
         if (deltaMillis <= 1000)
             throw new IllegalStateException("Illegal value for deltaMillis " + deltaMillis);
 
@@ -37,7 +39,7 @@ public class EqualIntervalTiming implements RequestTiming {
      * Timing strategy for all day long with equal intervals
      * @param deltaMillis the amount of time between location requests in millis
      */
-    public EqualIntervalTiming(int deltaMillis) {
+    EqualIntervalTiming(int deltaMillis) {
         this.from = TimeInDay.startOfDay();
         this.to = TimeInDay.endOfDay();
         this.deltaMillis = deltaMillis;
@@ -68,5 +70,13 @@ public class EqualIntervalTiming implements RequestTiming {
         cal.set(Calendar.MINUTE, from.getMinute());
         cal.set(Calendar.SECOND, from.getSecond());
         return new RequestDate(cal.getTime());
+    }
+
+    public static RequestTiming allDayTracking(int deltaMillis){
+        return new EqualIntervalTiming(deltaMillis);
+    }
+
+    public static RequestTiming betweenHoursTracking(TimeInDay from, TimeInDay to, int deltaMillis){
+        return new EqualIntervalTiming(from, to, deltaMillis);
     }
 }

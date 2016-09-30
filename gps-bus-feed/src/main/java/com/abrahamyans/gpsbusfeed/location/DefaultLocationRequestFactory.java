@@ -7,6 +7,11 @@ import com.google.android.gms.location.LocationRequest;
  */
 
 public class DefaultLocationRequestFactory implements LocationRequestFactory {
+
+    DefaultLocationRequestFactory(){
+        super();
+    }
+
     @Override
     public LocationRequest createLocationRequest() {
         LocationRequest locationRequest = LocationRequest.create();
@@ -14,5 +19,9 @@ public class DefaultLocationRequestFactory implements LocationRequestFactory {
         locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
+    }
+
+    public static LocationRequestFactory create(){
+        return new DefaultLocationRequestFactory();
     }
 }

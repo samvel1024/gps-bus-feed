@@ -1,10 +1,11 @@
-package com.abrahamyans.gpsbusfeed;
+package com.abrahamyans.gpsbusfeed.scheduler;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
-import com.abrahamyans.gpsbusfeed.event.GpsBusFeedError;
+import com.abrahamyans.gpsbusfeed.event.GpsBusFeed;
+import com.abrahamyans.gpsbusfeed.event.GpsBusFeedErrorEvent;
 import com.abrahamyans.gpsbusfeed.preference.PreferenceManager;
 import com.squareup.otto.Subscribe;
 
@@ -56,11 +57,11 @@ public class TrackerManager {
         return preferenceManager.isTrackingEnabled();
     }
 
-    public Date getLastRequestDate(){
+    public Date getLastLocationRequestDate(){
         return preferenceManager.getLastLocationRequestDate();
     }
 
-    public void saveNextRequestDate(Date date){
+    void saveNextRequestDate(Date date){
         preferenceManager.updateLastLocationRequestDate(date);
     }
 
@@ -73,7 +74,7 @@ public class TrackerManager {
     private static class EventInterceptor {
 
         @Subscribe
-        public void onError(GpsBusFeedError err){
+        public void onError(GpsBusFeedErrorEvent err){
             TrackerManager.instance.stopTracker();
             Log.e("DefaultErrorListener", "Stopped tracker because of error " + err.getStatus());
         }

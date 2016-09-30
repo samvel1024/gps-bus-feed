@@ -4,15 +4,15 @@ package com.abrahamyans.gpsbusfeed.event;
  * @author Samvel Abrahamyan
  */
 
-public class GpsBusFeedError {
+public class GpsBusFeedErrorEvent {
     private String message;
     private ErrorStatus status;
 
-    public GpsBusFeedError(ErrorStatus status){
+    public GpsBusFeedErrorEvent(ErrorStatus status){
         this(status, null);
     }
 
-    public GpsBusFeedError(ErrorStatus status, String message){
+    public GpsBusFeedErrorEvent(ErrorStatus status, String message){
         this.status = status;
         this.message = message != null ?message : status.getDefaultMessage();
     }
