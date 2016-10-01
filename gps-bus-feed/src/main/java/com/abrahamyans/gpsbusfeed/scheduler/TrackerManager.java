@@ -1,7 +1,7 @@
 package com.abrahamyans.gpsbusfeed.scheduler;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.abrahamyans.gpsbusfeed.event.GpsBusFeed;
@@ -24,8 +24,6 @@ public class TrackerManager {
     private PreferenceManager preferenceManager;
 
     private TrackerManager(Context context){
-        if(context instanceof Activity)
-            throw new IllegalStateException("Do not pass instance of activity as context, use getApplicationContext");
         this.preferenceManager = new PreferenceManager(context);
         GpsBusFeed.getInstance().register(new EventInterceptor());
     }
@@ -36,13 +34,14 @@ public class TrackerManager {
         return instance;
     }
 
-    public void startTracker(LocationTracker tracker){
+    public void startTracker(Context context, LocationTracker tracker){
         if (tracker == null)
             throw new IllegalArgumentException("tracker cannot be null");
         if(isTrackerEnabled())
             throw new IllegalStateException("The tracker is already enabled, consider checking with isTrackerEnabled");
         this.tracker = tracker;
         preferenceManager.setTrackingEnabled(true);
+        context.sendBroadcast(new Intent(context, AlarmBroadcastReceiver.class));
     }
 
 

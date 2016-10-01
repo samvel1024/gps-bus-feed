@@ -51,7 +51,7 @@ public class PreferenceManager {
         return prefs.getBoolean(PREF_TRACKING_ENABLED, false);
     }
 
-    public void reset(){
+    public synchronized void reset(){
         prefs.edit().clear().apply();
     }
 }
