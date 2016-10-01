@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class SingleRequestTiming implements RequestTiming {
 
-    SingleRequestTiming(){
+    public SingleRequestTiming(){
         super();
     }
 
@@ -19,7 +19,5 @@ public class SingleRequestTiming implements RequestTiming {
         return lastRequestDate == null ? RequestDate.IMMEDIATELY : RequestDate.NEVER;
     }
 
-    public static RequestTiming create(){
-        return new SingleRequestTiming();
-    }
+
 }

@@ -8,7 +8,7 @@ import com.google.android.gms.location.LocationRequest;
 
 public class DefaultLocationRequestFactory implements LocationRequestFactory {
 
-    DefaultLocationRequestFactory(){
+    public DefaultLocationRequestFactory(){
         super();
     }
 
@@ -21,7 +21,4 @@ public class DefaultLocationRequestFactory implements LocationRequestFactory {
         return locationRequest;
     }
 
-    public static LocationRequestFactory create(){
-        return new DefaultLocationRequestFactory();
-    }
 }

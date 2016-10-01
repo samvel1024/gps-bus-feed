@@ -8,8 +8,8 @@ import java.util.Date;
 
 public class RequestDate {
 
-    public static RequestDate IMMEDIATELY = new RequestDate();
-    public static RequestDate NEVER = new RequestDate();
+    public static final RequestDate IMMEDIATELY = new RequestDate();
+    public static final RequestDate NEVER = new RequestDate();
 
     private Date date;
 

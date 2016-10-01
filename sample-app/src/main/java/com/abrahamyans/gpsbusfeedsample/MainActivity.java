@@ -45,10 +45,10 @@ public class MainActivity extends AppCompatActivity {
         if (!trackerManager.isTrackerEnabled()) {
             trackerManager.startTracker(
                     this,
-                    LocationTracker.builder()
-                            .requestFactory(DefaultLocationRequestFactory.create())
-                            .timingStrategy(SingleRequestTiming.create())
-                            .filter(LocationAccuracyEventFilter.withMaxRadius(500F))
+                    new LocationTracker.Builder()
+                            .requestFactory(new DefaultLocationRequestFactory())
+                            .timingStrategy(new SingleRequestTiming())
+                            .filter(new LocationAccuracyEventFilter(500F))
                             .build()
             );
         }

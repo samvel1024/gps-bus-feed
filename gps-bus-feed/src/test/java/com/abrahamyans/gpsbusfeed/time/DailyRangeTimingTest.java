@@ -84,7 +84,7 @@ public class DailyRangeTimingTest {
         DailyRangeTiming strategy = new DailyRangeTiming(
                 new TimeInDay(6, 0),
                 new TimeInDay(1, 0),
-                EqualIntervalTiming.create(3000)
+                new EqualIntervalTiming(3000)
         );
 
         Date curr = composeDate(2016, 9, 26, 2, 0, 0);

@@ -15,7 +15,7 @@ public class EqualIntervalTiming implements RequestTiming {
 
     private final int deltaMillis;
 
-    EqualIntervalTiming(int deltaMillis) {
+    public EqualIntervalTiming(int deltaMillis) {
         if (deltaMillis <= MIN_INTERVAL_MILLIS)
             throw new IllegalStateException("Illegal value for deltaMillis " + deltaMillis);
         this.deltaMillis = deltaMillis;
@@ -31,8 +31,6 @@ public class EqualIntervalTiming implements RequestTiming {
         return new RequestDate(cal.getTime());
     }
 
-    public static RequestTiming create(int deltaMillis){
-        return new EqualIntervalTiming(deltaMillis);
-    }
+
 
 }

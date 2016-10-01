@@ -41,18 +41,12 @@ public class LocationTracker {
         return isValid;
     }
 
-    public static Builder builder(){
-        return new Builder();
-    }
-
     public static class Builder {
 
         private RequestTiming timingStrategy;
         private List<LocationEventFilter> locationEventFilters = new ArrayList<>();
         private LocationRequestFactory requestFactory;
 
-        Builder(){
-        }
 
         public Builder timingStrategy(RequestTiming timing){
             if (timing == null)
@@ -85,8 +79,8 @@ public class LocationTracker {
         public LocationTracker build(){
             LocationTracker locationTracker = new LocationTracker();
             locationTracker.filters = locationEventFilters;
-            locationTracker.timing = timingStrategy == null ? SingleRequestTiming.create() : timingStrategy;
-            locationTracker.requestFactory = requestFactory == null ? DefaultLocationRequestFactory.create() : requestFactory;
+            locationTracker.timing = timingStrategy == null ? new SingleRequestTiming(): timingStrategy;
+            locationTracker.requestFactory = requestFactory == null ? new DefaultLocationRequestFactory() : requestFactory;
             return locationTracker;
         }
     }
