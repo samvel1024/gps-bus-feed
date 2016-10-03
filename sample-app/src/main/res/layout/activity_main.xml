@@ -14,8 +14,16 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onRequestLocation"
+        android:layout_gravity="center"
+        android:onClick="onRequestLocationOnce"
         android:text="Request location" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Turn on tracker"
+        android:onClick="onTurnOnTracking"/>
 
     <TextView
         android:layout_width="wrap_content"

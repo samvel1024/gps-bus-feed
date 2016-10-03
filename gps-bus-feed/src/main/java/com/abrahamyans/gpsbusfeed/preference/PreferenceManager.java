@@ -32,7 +32,7 @@ public class PreferenceManager {
     public synchronized Date getLastLocationRequestDate() {
         String dateStr = prefs.getString(PREF_LAST_REQUEST_DATE, null);
         try {
-            return new SimpleDateFormat(DATE_FORMAT, Locale.US).parse(dateStr);
+            return dateStr == null ? null : new SimpleDateFormat(DATE_FORMAT, Locale.US).parse(dateStr);
         } catch (ParseException e) {
             throw new IllegalStateException("Cannot parse the stored date", e);
         }
@@ -44,6 +44,7 @@ public class PreferenceManager {
     }
 
     public synchronized void setTrackingEnabled(boolean tracking){
+        reset();
         prefs.edit().putBoolean(PREF_TRACKING_ENABLED, tracking).apply();
     }
 

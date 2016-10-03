@@ -1,11 +1,13 @@
 package com.abrahamyans.gpsbusfeed.filter;
 
-import com.abrahamyans.gpsbusfeed.event.LocationAvailableEvent;
+import com.abrahamyans.gpsbusfeed.event.LocationChangedEvent;
+
+import java.io.Serializable;
 
 /**
  * @author Samvel Abrahamyan
  */
 
-public interface LocationEventFilter {
-    boolean shouldBroadcastLocation(LocationAvailableEvent location);
+public interface LocationEventFilter extends Serializable{
+    boolean shouldBroadcastLocation(LocationChangedEvent location);
 }

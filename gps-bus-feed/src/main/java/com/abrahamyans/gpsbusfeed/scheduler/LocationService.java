@@ -11,7 +11,7 @@ import android.util.Log;
 import com.abrahamyans.gpsbusfeed.event.ErrorStatus;
 import com.abrahamyans.gpsbusfeed.event.GpsBusFeed;
 import com.abrahamyans.gpsbusfeed.event.GpsBusFeedErrorEvent;
-import com.abrahamyans.gpsbusfeed.event.LocationAvailableEvent;
+import com.abrahamyans.gpsbusfeed.event.LocationChangedEvent;
 import com.abrahamyans.gpsbusfeed.location.LocationApiListener;
 import com.abrahamyans.gpsbusfeed.location.LocationApiProvider;
 import com.google.android.gms.common.ConnectionResult;
@@ -25,25 +25,44 @@ import java.util.Date;
 public class LocationService extends Service implements
         LocationApiListener {
 
-    private static final String TAG = LocationService.class.getName();
-    private final GpsBusFeed feed = GpsBusFeed.getInstance();
-    private final TrackerManager trackerManager = TrackerManager.getInstance(getApplicationContext());
-    private final LocationTracker tracker = trackerManager.getRunningTracker();
-    private final LocationApiProvider apiProvider = new LocationApiProvider(this, this.getBaseContext());
+    private static final String TAG = LocationService.class.getSimpleName();
+    private GpsBusFeed feed;
+    private LocationTracker tracker;
+    private LocationApiProvider apiProvider;
+    private Intent wakeLock;
+    private boolean processingLocation;
 
     private void disconnect() {
+        Log.d(TAG, "Disconnecting from location API");
         stopSelf();
+        ServiceInvokerReceiver.completeWakefulIntent(wakeLock);
         apiProvider.disconnect();
     }
 
     private void requestLocation(){
+        Log.d(TAG, "Requesting location");
         LocationRequest locationRequest = tracker.createLocationRequest();
         apiProvider.requestLocation(locationRequest);
+        processingLocation = true;
+    }
+
+    @Override
+    public void onCreate() {
+        Log.d(TAG, "Created LocationService");
+        super.onCreate();
+        feed = GpsBusFeed.getInstance();
+        tracker = TrackerManager.getInstance(getApplicationContext()).getRunningTracker();
+        apiProvider = new LocationApiProvider(this, this.getBaseContext());
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        apiProvider.connect();
+        if (processingLocation){
+            Log.w(TAG, "Skipping location request, service is busy processing location");
+        }else {
+            this.wakeLock = intent;
+            apiProvider.connect();
+        }
         return START_NOT_STICKY;
     }
 
@@ -55,16 +74,18 @@ public class LocationService extends Service implements
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(TAG, "Received location " + location);
-        LocationAvailableEvent event = new LocationAvailableEvent(location, new Date());
+        Log.d(TAG, "Changed location " + location);
+        LocationChangedEvent event = new LocationChangedEvent(location, new Date());
         if (tracker.isValidLocationEvent(event)) {
-            feed.onLocationAvailable(new LocationAvailableEvent(location, new Date()));
+            feed.onLocationChanged(new LocationChangedEvent(location, new Date()));
         }
+        processingLocation = false;
         disconnect();
     }
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "Destroyed");
         super.onDestroy();
     }
 

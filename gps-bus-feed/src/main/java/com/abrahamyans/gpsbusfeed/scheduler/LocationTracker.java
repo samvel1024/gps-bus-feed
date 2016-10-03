@@ -1,6 +1,6 @@
 package com.abrahamyans.gpsbusfeed.scheduler;
 
-import com.abrahamyans.gpsbusfeed.event.LocationAvailableEvent;
+import com.abrahamyans.gpsbusfeed.event.LocationChangedEvent;
 import com.abrahamyans.gpsbusfeed.filter.LocationEventFilter;
 import com.abrahamyans.gpsbusfeed.location.DefaultLocationRequestFactory;
 import com.abrahamyans.gpsbusfeed.location.LocationRequestFactory;
@@ -8,6 +8,7 @@ import com.abrahamyans.gpsbusfeed.time.RequestTiming;
 import com.abrahamyans.gpsbusfeed.time.SingleRequestTiming;
 import com.google.android.gms.location.LocationRequest;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
  * @author Samvel Abrahamyan
  */
 
-public class LocationTracker {
+public class LocationTracker implements Serializable{
 
     private List<LocationEventFilter> filters;
     private RequestTiming timing;
@@ -27,14 +28,14 @@ public class LocationTracker {
     }
 
     public RequestDate getNextRequestDate(Date lastRequestDate){
-        return timing.getNextLocationRequestDate(lastRequestDate);
+        return timing.nextRequestDate(lastRequestDate);
     }
 
     public LocationRequest createLocationRequest(){
         return requestFactory.createLocationRequest();
     }
 
-    public boolean isValidLocationEvent(LocationAvailableEvent ev){
+    public boolean isValidLocationEvent(LocationChangedEvent ev){
         boolean isValid = true;
         for (LocationEventFilter filter: filters)
             isValid &= filter.shouldBroadcastLocation(ev);
@@ -63,8 +64,8 @@ public class LocationTracker {
             return this;
         }
 
-        public Builder requestFactory(LocationRequestFactory factory){
-            if (requestFactory == null)
+        public Builder requestFactory(DefaultLocationRequestFactory factory){
+            if (factory == null)
                 throw new IllegalArgumentException("factory cannot be null");
             verifyIsNotOverridden(this.requestFactory, "requestFactory");
             this.requestFactory = factory;

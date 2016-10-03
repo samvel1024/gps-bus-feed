@@ -30,7 +30,7 @@ public class GpsBusFeed {
         postEventToMainThread(error);
     }
 
-    public void onLocationAvailable(LocationAvailableEvent event) {
+    public void onLocationChanged(LocationChangedEvent event) {
         postEventToMainThread(event);
     }
 

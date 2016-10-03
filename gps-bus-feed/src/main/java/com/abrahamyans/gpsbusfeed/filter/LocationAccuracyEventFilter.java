@@ -1,6 +1,6 @@
 package com.abrahamyans.gpsbusfeed.filter;
 
-import com.abrahamyans.gpsbusfeed.event.LocationAvailableEvent;
+import com.abrahamyans.gpsbusfeed.event.LocationChangedEvent;
 
 /**
  * @author Samvel Abrahamyan
@@ -17,7 +17,7 @@ public class LocationAccuracyEventFilter implements LocationEventFilter {
     }
 
     @Override
-    public boolean shouldBroadcastLocation(LocationAvailableEvent location) {
+    public boolean shouldBroadcastLocation(LocationChangedEvent location) {
         return location.getLocation().hasAccuracy() && location.getLocation().getAccuracy() <= maximumRadius;
     }
 

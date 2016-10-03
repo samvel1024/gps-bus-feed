@@ -17,6 +17,8 @@ import java.util.Date;
 
 public class TrackerManager {
 
+    private static final String TAG = "TrackerManager";
+
     private static TrackerManager instance;
 
     private LocationTracker tracker;
@@ -42,6 +44,7 @@ public class TrackerManager {
         this.tracker = tracker;
         preferenceManager.setTrackingEnabled(true);
         context.sendBroadcast(new Intent(context, AlarmBroadcastReceiver.class));
+        Log.d(TAG, "Started tracker");
     }
 
 
@@ -50,6 +53,7 @@ public class TrackerManager {
             throw new IllegalStateException("The tracker is already disabled, consider checking with isTrackerEnabled");
         preferenceManager.setTrackingEnabled(false);
         this.tracker = null;
+        Log.d(TAG, "Stopped tracker");
     }
 
     public boolean isTrackerEnabled(){

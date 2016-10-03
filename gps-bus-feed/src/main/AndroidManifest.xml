@@ -11,6 +11,7 @@
 
         <service android:name=".scheduler.LocationService"/>
         <receiver android:name=".scheduler.AlarmBroadcastReceiver"/>
+        <receiver android:name=".scheduler.ServiceInvokerReceiver"/>
     </application>
 
 </manifest>

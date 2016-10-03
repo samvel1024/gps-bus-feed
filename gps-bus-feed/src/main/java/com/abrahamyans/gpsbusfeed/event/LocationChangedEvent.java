@@ -7,11 +7,11 @@ import java.util.Date;
 /**
  * @author Samvel Abrahamyan
  */
-public class LocationAvailableEvent {
+public class LocationChangedEvent {
     private Date date;
     private Location location;
 
-    public LocationAvailableEvent(Location location, Date date) {
+    public LocationChangedEvent(Location location, Date date) {
         this.date = date;
         this.location = location;
     }

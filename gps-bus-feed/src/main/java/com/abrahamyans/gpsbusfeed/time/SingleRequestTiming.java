@@ -15,7 +15,7 @@ public class SingleRequestTiming implements RequestTiming {
     }
 
     @Override
-    public RequestDate getNextLocationRequestDate(Date lastRequestDate) {
+    public RequestDate nextRequestDate(Date lastRequestDate) {
         return lastRequestDate == null ? RequestDate.IMMEDIATELY : RequestDate.NEVER;
     }
 

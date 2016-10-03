@@ -16,11 +16,11 @@ import static com.abrahamyans.gpsbusfeed.time.TimeTestHelper.fromDate;
  * @author Samvel Abrahamyan
  */
 
-public class DailyRangeTimingTest {
+public class HoursWindowTimingTest {
 
     @Test
     public void testNextMidnightExcludedWithOverflow(){
-        DailyRangeTiming strategy = new DailyRangeTiming(
+        HoursWindowTiming strategy = new HoursWindowTiming(
                 new TimeInDay(10, 0),
                 new TimeInDay(21, 0),
                 new EqualIntervalTiming(3000)
@@ -28,7 +28,7 @@ public class DailyRangeTimingTest {
 
         Date curr = composeDate(2016, 9, 26, 22, 0, 0);
 
-        RequestDate next = strategy.getNextLocationRequestDate(curr);
+        RequestDate next = strategy.nextRequestDate(curr);
 
         Calendar nextCal = fromDate(next.getDate());
         Assert.assertEquals(2016, nextCal.get(Calendar.YEAR));
@@ -40,7 +40,7 @@ public class DailyRangeTimingTest {
 
     @Test
     public void testNextMidnightExcluded() {
-        DailyRangeTiming strategy = new DailyRangeTiming(
+        HoursWindowTiming strategy = new HoursWindowTiming(
                 new TimeInDay(10, 0),
                 new TimeInDay(21, 0),
                 new EqualIntervalTiming(3000)
@@ -48,7 +48,7 @@ public class DailyRangeTimingTest {
 
         Date curr = composeDate(2016, 9, 26, 16, 0, 0);
 
-        RequestDate next = strategy.getNextLocationRequestDate(curr);
+        RequestDate next = strategy.nextRequestDate(curr);
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(curr);
@@ -59,7 +59,7 @@ public class DailyRangeTimingTest {
 
     @Test
     public void testNextMidnightIncluded() {
-        DailyRangeTiming strategy = new DailyRangeTiming(
+        HoursWindowTiming strategy = new HoursWindowTiming(
                 new TimeInDay(6, 0),
                 new TimeInDay(1, 0),
                 new EqualIntervalTiming(4000)
@@ -67,7 +67,7 @@ public class DailyRangeTimingTest {
 
         Date curr = composeDate(2016, 9, 26, 16, 0, 0);
 
-        RequestDate next = strategy.getNextLocationRequestDate(curr);
+        RequestDate next = strategy.nextRequestDate(curr);
 
         Calendar nextCal = fromDate(next.getDate());
         Assert.assertEquals(2016, nextCal.get(Calendar.YEAR));
@@ -81,7 +81,7 @@ public class DailyRangeTimingTest {
 
     @Test
     public void testNextMidnightIncludedWithOverflow() {
-        DailyRangeTiming strategy = new DailyRangeTiming(
+        HoursWindowTiming strategy = new HoursWindowTiming(
                 new TimeInDay(6, 0),
                 new TimeInDay(1, 0),
                 new EqualIntervalTiming(3000)
@@ -89,7 +89,7 @@ public class DailyRangeTimingTest {
 
         Date curr = composeDate(2016, 9, 26, 2, 0, 0);
 
-        RequestDate next = strategy.getNextLocationRequestDate(curr);
+        RequestDate next = strategy.nextRequestDate(curr);
 
         Calendar nextCal = fromDate(next.getDate());
         Assert.assertEquals(2016, nextCal.get(Calendar.YEAR));
