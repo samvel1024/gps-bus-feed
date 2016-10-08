@@ -17,6 +17,18 @@ public class Location {
         this.lon = lon;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public Double getLon() {
+        return lon;
+    }
+
     @Override
     public String toString() {
         return "Location{" +

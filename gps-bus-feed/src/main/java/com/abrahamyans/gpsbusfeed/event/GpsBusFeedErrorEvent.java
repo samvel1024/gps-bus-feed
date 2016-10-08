@@ -25,4 +25,11 @@ public class GpsBusFeedErrorEvent {
         return status;
     }
 
+    @Override
+    public String toString() {
+        return "GpsBusFeedErrorEvent{" +
+                "message='" + message + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

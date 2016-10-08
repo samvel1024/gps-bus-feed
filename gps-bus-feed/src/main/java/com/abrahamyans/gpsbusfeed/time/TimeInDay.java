@@ -2,13 +2,14 @@ package com.abrahamyans.gpsbusfeed.time;
 
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
  * @author Samvel Abrahamyan
  */
 
-public class TimeInDay implements Comparable<TimeInDay> {
+public class TimeInDay implements Comparable<TimeInDay>, Serializable {
 
     private int hour;
     private int minute;
