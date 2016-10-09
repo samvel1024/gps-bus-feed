@@ -1,4 +1,4 @@
-package com.abrahamyans.gpsbusfeed.preference;
+package com.abrahamyans.gpsbusfeed.persist;
 
 import android.content.Context;
 import android.content.SharedPreferences;

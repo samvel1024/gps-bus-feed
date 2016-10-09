@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.abrahamyans.gpsbusfeed.event.GpsBusFeed;
 import com.abrahamyans.gpsbusfeed.event.GpsBusFeedErrorEvent;
-import com.abrahamyans.gpsbusfeed.preference.PreferenceManager;
+import com.abrahamyans.gpsbusfeed.persist.PreferenceManager;
 import com.squareup.otto.Subscribe;
 
 import java.util.Date;

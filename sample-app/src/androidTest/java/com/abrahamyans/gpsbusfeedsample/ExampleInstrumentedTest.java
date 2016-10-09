@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.abrahamyans.gpsbusfeed", appContext.getPackageName());
+        assertEquals("com.abrahamyans.com.abrahamyans.gpsbusfeed", appContext.getPackageName());
     }
 }

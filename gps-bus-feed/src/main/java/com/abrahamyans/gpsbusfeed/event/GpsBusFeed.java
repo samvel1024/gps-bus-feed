@@ -6,17 +6,24 @@ import android.os.Looper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Samvel Abrahamyan
  */
-public class GpsBusFeed {
+public class GpsBusFeed implements Serializable{
 
     private static final GpsBusFeed instance = new GpsBusFeed();
 
-    private final Bus bus = new Bus(ThreadEnforcer.MAIN, "GpsBusFeed");
+    private transient final Bus bus = new Bus(ThreadEnforcer.MAIN, "GpsBusFeed");
 
-    private final Handler main = new Handler(Looper.getMainLooper());
+    private transient final Handler main = new Handler(Looper.getMainLooper());
 
+    private final List<String> permanentListeners = new ArrayList<>();
 
     private GpsBusFeed() {
         super();
@@ -47,11 +54,27 @@ public class GpsBusFeed {
         }
     }
 
+    public void registerPermanent(Serializable listener){
+        permanentListeners.add(listener.getClass().getName());
+        register(listener);
+    }
+
     public void register(Object listener) {
         bus.register(listener);
     }
 
     public void unregister(Object listener) {
         bus.unregister(listener);
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
+        in.defaultReadObject();
+        for (String className: permanentListeners){
+            try {
+                register(Class.forName(className).newInstance());
+            } catch (Exception e) {
+                throw new IllegalStateException("Could not instantiate class " + className, e);
+            }
+        }
     }
 }
