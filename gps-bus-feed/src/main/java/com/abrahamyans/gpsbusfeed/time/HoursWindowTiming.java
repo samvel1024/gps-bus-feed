@@ -11,6 +11,7 @@ import java.util.Date;
 
 public class HoursWindowTiming implements RequestTiming{
 
+    private static final long serialVersionUID = -6979182531465786973L;
     private RequestTiming requestTiming;
 
     private final TimeInDay from;

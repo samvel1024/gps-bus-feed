@@ -1,10 +1,10 @@
 package com.abrahamyans.gpsbusfeed.persist;
 
+import android.content.Context;
+
 import org.apache.commons.lang.SerializationUtils;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.Serializable;
 
 /**
@@ -19,9 +19,9 @@ public class SerializationManager {
         return instance;
     }
 
-    public void serialize(Serializable obj){
+    public void serialize(Context ctx, Serializable obj){
         try {
-            SerializationUtils.serialize(obj, new FileOutputStream(getFileName(obj.getClass())));
+            SerializationUtils.serialize(obj, ctx.openFileOutput(getFileName(obj.getClass()), Context.MODE_PRIVATE));
         } catch (FileNotFoundException e) {
             throw new IllegalStateException("File not found", e);
         }
@@ -29,9 +29,9 @@ public class SerializationManager {
 
 
     @SuppressWarnings("unchecked")
-    public <T> T deserialize(Class<T> klass){
+    public <T> T deserialize(Context ctx, Class<T> klass){
         try {
-            return (T) SerializationUtils.deserialize(new FileInputStream(getFileName(klass)));
+            return (T) SerializationUtils.deserialize(ctx.openFileInput(getFileName(klass)));
         } catch (FileNotFoundException e) {
             throw new IllegalStateException("File not found", e);
         }

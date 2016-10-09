@@ -11,6 +11,7 @@ import java.util.Calendar;
 
 public class TimeInDay implements Comparable<TimeInDay>, Serializable {
 
+    private static final long serialVersionUID = 1760571808853833561L;
     private int hour;
     private int minute;
     private int second;

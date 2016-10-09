@@ -17,12 +17,17 @@ import java.util.List;
  */
 public class GpsBusFeed implements Serializable {
 
+    private static final long serialVersionUID = 4067049333336042083L;
+
     private static final GpsBusFeed instance = new GpsBusFeed();
 
-    private transient final Bus bus = new Bus(ThreadEnforcer.MAIN, "GpsBusFeed");
+    private transient Bus bus = new Bus(ThreadEnforcer.MAIN, "GpsBusFeed");
 
-    private transient final Handler main = new Handler(Looper.getMainLooper());
+    private transient Handler main = new Handler(Looper.getMainLooper());
 
+    /**
+     * Contains class names of all registered permanent listeners
+     */
     private final List<String> permanentListeners = new ArrayList<>();
 
     private GpsBusFeed() {
@@ -51,15 +56,16 @@ public class GpsBusFeed implements Serializable {
     }
 
     private void runOnMainThread(final Runnable runnable) {
-        if (Looper.myLooper() == Looper.getMainLooper())
+        if (Looper.myLooper() == Looper.getMainLooper()) {
             runnable.run();
-        else
+        } else {
             main.post(new Runnable() {
                 @Override
                 public void run() {
                     runOnMainThread(runnable);
                 }
             });
+        }
     }
 
     public void registerPermanent(Serializable listener) {
@@ -87,6 +93,12 @@ public class GpsBusFeed implements Serializable {
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
+        main = new Handler(Looper.getMainLooper());
+        bus = new Bus(ThreadEnforcer.MAIN, "GpsBusFeed");
+        registerDeserializedPermanentListeners();
+    }
+
+    private void registerDeserializedPermanentListeners(){
         for (String className : permanentListeners) {
             try {
                 register(Class.forName(className).newInstance());

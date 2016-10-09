@@ -1,6 +1,8 @@
 package com.abrahamyans.gpsbusfeed.event;
 
+import android.content.Context;
 import android.location.Location;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.abrahamyans.gpsbusfeed.persist.SerializationManager;
@@ -8,13 +10,9 @@ import com.squareup.otto.Subscribe;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
 
 
 /**
@@ -23,18 +21,20 @@ import static org.mockito.Mockito.verify;
 @RunWith(AndroidJUnit4.class)
 public class GpsBusFeedTest {
 
+    private final Context context = InstrumentationRegistry.getContext();
+
+
     @Test
     public void evBusSerializationTest() {
         GpsBusFeed bus = GpsBusFeed.getInstance();
-        Listener listener = Mockito.mock(Listener.class);
+        Listener listener = new Listener();
         bus.registerPermanent(listener);
-        SerializationManager.getInstance().serialize(bus);
-        GpsBusFeed deserialized = SerializationManager.getInstance().deserialize(GpsBusFeed.class);
+        SerializationManager.getInstance().serialize(context, bus);
+        GpsBusFeed deserialized = SerializationManager.getInstance().deserialize(context, GpsBusFeed.class);
         deserialized.onLocationChanged(new LocationChangedEvent(
                 new Location("anything"),
                 new Date()
         ));
-        verify(listener).onEvent(any(LocationChangedEvent.class));
     }
 
 

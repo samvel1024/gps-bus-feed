@@ -12,6 +12,7 @@ import java.util.Date;
 public class EqualIntervalTiming implements RequestTiming {
 
     private static final int MIN_INTERVAL_MILLIS = 1500;
+    private static final long serialVersionUID = -8871637799063373295L;
 
     private final int deltaMillis;
 
