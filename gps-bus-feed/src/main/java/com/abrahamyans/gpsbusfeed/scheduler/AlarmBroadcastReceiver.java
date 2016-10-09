@@ -24,25 +24,33 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         Log.d(TAG, "Received broadcast");
 
         TrackerManager trackerManager = TrackerManager.getInstance(context);
-        LocationTracker runningTracker = trackerManager.getRunningTracker();
 
-        RequestDate nextRequestDate = runningTracker.getNextRequestDate(trackerManager.getLastLocationRequestDate());
-
-        if (nextRequestDate.isDatePresent()){
-            context.sendBroadcast(new Intent(context, ServiceInvokerReceiver.class));
-            scheduleLocationBroadcast(context, nextRequestDate.getDate());
+        if (!trackerManager.isTrackerEnabled()) {
+            Log.d(TAG, "Tracker stop is requested, shutting down broadcast receiver");
+            return;
         }
-        else if (nextRequestDate == RequestDate.IMMEDIATELY){
-            context.sendBroadcast(new Intent(context, ServiceInvokerReceiver.class));
-            scheduleLocationBroadcast(context, getDateForImmediate());
-        }else if (nextRequestDate == RequestDate.NEVER){
+
+        LocationTracker tracker = trackerManager.getRunningTracker();
+        RequestDate nextRequestDate = tracker.getNextRequestDate(trackerManager.getLastLocationRequestDate());
+
+        if (nextRequestDate == RequestDate.NEVER) {
+            Log.d(TAG, "Next request date: NEVER. Stopping");
             trackerManager.stopTracker();
+            return;
         }
 
+        context.sendBroadcast(new Intent(context, ServiceInvokerReceiver.class));
+        Date nextDate = null;
+        if (nextRequestDate.isDatePresent()) {
+            nextDate = nextRequestDate.getDate();
+        } else if (nextRequestDate == RequestDate.IMMEDIATELY) {
+            nextDate = getDateForImmediate();
+        }
+        scheduleLocationBroadcast(context, nextDate);
     }
 
-    private void scheduleLocationBroadcast(Context context, Date date){
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+    private void scheduleLocationBroadcast(Context context, Date date) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent gpsTrackerIntent = new Intent(context, AlarmBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, 0);
 
@@ -51,10 +59,11 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 pendingIntent);
 
         TrackerManager.getInstance(context).saveNextRequestDate(date);
+        Log.d(TAG, "Scheduled broadcast for " + date);
     }
 
 
-    private Date getDateForImmediate(){
+    private Date getDateForImmediate() {
         Date curr = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(curr);

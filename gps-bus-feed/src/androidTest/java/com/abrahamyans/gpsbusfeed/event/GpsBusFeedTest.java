@@ -32,6 +32,7 @@ public class GpsBusFeedTest {
         SerializationManager.getInstance().serialize(context, bus);
         GpsBusFeed deserialized = SerializationManager.getInstance().deserialize(context, GpsBusFeed.class);
         deserialized.onLocationChanged(new LocationChangedEvent(
+                context,
                 new Location("anything"),
                 new Date()
         ));

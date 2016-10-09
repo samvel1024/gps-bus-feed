@@ -75,9 +75,9 @@ public class LocationService extends Service implements
     @Override
     public void onLocationChanged(Location location) {
         Log.d(TAG, "Changed location " + location);
-        LocationChangedEvent event = new LocationChangedEvent(location, new Date());
+        LocationChangedEvent event = new LocationChangedEvent(getApplicationContext(), location, new Date());
         if (tracker.isValidLocationEvent(event)) {
-            feed.onLocationChanged(new LocationChangedEvent(location, new Date()));
+            feed.onLocationChanged(new LocationChangedEvent(getApplicationContext(), location, new Date()));
         }
         processingLocation = false;
         disconnect();
@@ -96,14 +96,19 @@ public class LocationService extends Service implements
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        feed.onError(new GpsBusFeedErrorEvent(ErrorStatus.API_CONNECTION_FAILURE));
+        broadcastError(new GpsBusFeedErrorEvent(ErrorStatus.API_CONNECTION_FAILURE));
         disconnect();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        feed.onError(new GpsBusFeedErrorEvent(ErrorStatus.API_CONNECTION_FAILURE, "Connection was suspended"));
+        broadcastError(new GpsBusFeedErrorEvent(ErrorStatus.API_CONNECTION_FAILURE, "Connection was suspended"));
         Log.e(TAG, "Connection has been suspended");
+    }
+
+    private void broadcastError(GpsBusFeedErrorEvent ev){
+        TrackerManager.getInstance(getApplicationContext()).stopTracker();
+        feed.onError(ev);
     }
 }
 

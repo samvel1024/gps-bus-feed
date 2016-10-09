@@ -95,10 +95,10 @@ public class GpsBusFeed implements Serializable {
         in.defaultReadObject();
         main = new Handler(Looper.getMainLooper());
         bus = new Bus(ThreadEnforcer.MAIN, "GpsBusFeed");
-        registerDeserializedPermanentListeners();
+        restorePermanentListeners();
     }
 
-    private void registerDeserializedPermanentListeners(){
+    private void restorePermanentListeners(){
         for (String className : permanentListeners) {
             try {
                 register(Class.forName(className).newInstance());

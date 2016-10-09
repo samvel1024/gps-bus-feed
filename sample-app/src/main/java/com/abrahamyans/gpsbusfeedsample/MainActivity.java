@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     new LocationTracker.Builder()
                             .timingStrategy(new EqualIntervalTiming(5000)).build()
             );
-            feed.register(new LocationEventListener(this));
+            feed.registerPermanent(new LocationEventListener());
         } else {
             Toast.makeText(this, "Tracker is already enabled", Toast.LENGTH_SHORT).show();
         }

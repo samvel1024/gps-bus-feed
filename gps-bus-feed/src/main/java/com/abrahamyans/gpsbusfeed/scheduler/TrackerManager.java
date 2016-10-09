@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.abrahamyans.gpsbusfeed.event.GpsBusFeed;
-import com.abrahamyans.gpsbusfeed.event.GpsBusFeedErrorEvent;
 import com.abrahamyans.gpsbusfeed.persist.PreferenceManager;
-import com.squareup.otto.Subscribe;
+import com.abrahamyans.gpsbusfeed.persist.SerializationManager;
 
 import java.util.Date;
 
@@ -27,7 +25,9 @@ public class TrackerManager {
 
     private TrackerManager(Context context){
         this.preferenceManager = new PreferenceManager(context);
-        GpsBusFeed.getInstance().register(new EventInterceptor());
+        if (preferenceManager.isTrackingEnabled()){
+            tracker = SerializationManager.getInstance().deserialize(context, LocationTracker.class);
+        }
     }
 
     public static TrackerManager getInstance(Context context){
@@ -74,13 +74,4 @@ public class TrackerManager {
         return tracker;
     }
 
-    private static class EventInterceptor {
-
-        @Subscribe
-        public void onError(GpsBusFeedErrorEvent err){
-            TrackerManager.instance.stopTracker();
-            Log.e("DefaultErrorListener", "Stopped tracker because of error " + err.getStatus());
-        }
-
-    }
 }

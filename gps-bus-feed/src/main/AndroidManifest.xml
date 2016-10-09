@@ -9,9 +9,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
 
-        <service android:name=".scheduler.LocationService"/>
-        <receiver android:name=".scheduler.AlarmBroadcastReceiver"/>
-        <receiver android:name=".scheduler.ServiceInvokerReceiver"/>
+        <service android:name="com.abrahamyans.gpsbusfeed.scheduler.LocationService"/>
+        <receiver android:name="com.abrahamyans.gpsbusfeed.scheduler.AlarmBroadcastReceiver"/>
+        <receiver android:name="com.abrahamyans.gpsbusfeed.scheduler.ServiceInvokerReceiver"/>
     </application>
 
 </manifest>
