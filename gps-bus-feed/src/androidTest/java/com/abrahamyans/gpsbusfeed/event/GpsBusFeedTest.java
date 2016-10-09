@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import static org.mockito.Matchers.any;
@@ -26,7 +27,7 @@ public class GpsBusFeedTest {
     public void evBusSerializationTest() {
         GpsBusFeed bus = GpsBusFeed.getInstance();
         Listener listener = Mockito.mock(Listener.class);
-//        bus.registerPermanent(listener);
+        bus.registerPermanent(listener);
         SerializationManager.getInstance().serialize(bus);
         GpsBusFeed deserialized = SerializationManager.getInstance().deserialize(GpsBusFeed.class);
         deserialized.onLocationChanged(new LocationChangedEvent(
@@ -37,7 +38,7 @@ public class GpsBusFeedTest {
     }
 
 
-    public static class Listener  {
+    public static class Listener implements Serializable {
         @Subscribe
         public void onEvent(LocationChangedEvent ev) {
 

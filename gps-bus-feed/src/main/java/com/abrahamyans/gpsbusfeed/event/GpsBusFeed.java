@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author Samvel Abrahamyan
  */
-public class GpsBusFeed implements Serializable{
+public class GpsBusFeed implements Serializable {
 
     private static final GpsBusFeed instance = new GpsBusFeed();
 
@@ -42,34 +42,52 @@ public class GpsBusFeed implements Serializable{
     }
 
     private void postEventToMainThread(final Object event) {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            bus.post(event);
-        } else {
+        runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                bus.post(event);
+            }
+        });
+    }
+
+    private void runOnMainThread(final Runnable runnable) {
+        if (Looper.myLooper() == Looper.getMainLooper())
+            runnable.run();
+        else
             main.post(new Runnable() {
                 @Override
                 public void run() {
-                    postEventToMainThread(event);
+                    runOnMainThread(runnable);
                 }
             });
-        }
     }
 
-    public void registerPermanent(Serializable listener){
+    public void registerPermanent(Serializable listener) {
         permanentListeners.add(listener.getClass().getName());
         register(listener);
     }
 
-    public void register(Object listener) {
-        bus.register(listener);
+    public void register(final Object listener) {
+        runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                bus.register(listener);
+            }
+        });
     }
 
-    public void unregister(Object listener) {
-        bus.unregister(listener);
+    public void unregister(final Object listener) {
+        runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                bus.unregister(listener);
+            }
+        });
     }
 
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        for (String className: permanentListeners){
+        for (String className : permanentListeners) {
             try {
                 register(Class.forName(className).newInstance());
             } catch (Exception e) {
