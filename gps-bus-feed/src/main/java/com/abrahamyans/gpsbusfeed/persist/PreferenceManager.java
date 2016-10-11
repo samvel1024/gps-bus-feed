@@ -2,6 +2,7 @@ package com.abrahamyans.gpsbusfeed.persist;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,15 +45,17 @@ public class PreferenceManager {
     }
 
     public synchronized void setTrackingEnabled(boolean tracking){
+        Log.d("PreferenceManager", "Setting tracking state " + tracking);
         reset();
         prefs.edit().putBoolean(PREF_TRACKING_ENABLED, tracking).apply();
     }
 
     public synchronized boolean isTrackingEnabled(){
+        Log.d("PreferenceManager", "requested state");
         return prefs.getBoolean(PREF_TRACKING_ENABLED, false);
     }
 
-    public synchronized void reset(){
+    private synchronized void reset(){
         prefs.edit().clear().apply();
     }
 }

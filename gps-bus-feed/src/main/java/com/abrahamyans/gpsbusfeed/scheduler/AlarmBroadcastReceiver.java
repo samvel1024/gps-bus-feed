@@ -29,7 +29,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             Log.d(TAG, "Tracker stop is requested, shutting down broadcast receiver");
             return;
         }
-
+ 
         LocationTracker tracker = trackerManager.getRunningTracker();
         RequestDate nextRequestDate = tracker.getNextRequestDate(trackerManager.getLastLocationRequestDate());
 

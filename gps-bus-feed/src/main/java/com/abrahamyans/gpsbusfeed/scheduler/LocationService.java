@@ -77,7 +77,7 @@ public class LocationService extends Service implements
         Log.d(TAG, "Changed location " + location);
         LocationChangedEvent event = new LocationChangedEvent(getApplicationContext(), location, new Date());
         if (tracker.isValidLocationEvent(event)) {
-            feed.onLocationChanged(new LocationChangedEvent(getApplicationContext(), location, new Date()));
+            feed.onLocationChanged(event);
         }
         processingLocation = false;
         disconnect();
