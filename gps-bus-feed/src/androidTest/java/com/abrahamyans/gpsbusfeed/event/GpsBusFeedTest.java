@@ -26,7 +26,7 @@ public class GpsBusFeedTest {
 
     @Test
     public void evBusSerializationTest() {
-        GpsBusFeed bus = GpsBusFeed.getInstance();
+        GpsBusFeed bus = GpsBusFeed.getInstance(context);
         Listener listener = new Listener();
         bus.registerPermanent(listener);
         SerializationManager.getInstance().serialize(context, bus);
@@ -40,6 +40,8 @@ public class GpsBusFeedTest {
 
 
     public static class Listener implements Serializable {
+        private static final long serialVersionUID = 7700827243119194721L;
+
         @Subscribe
         public void onEvent(LocationChangedEvent ev) {
 

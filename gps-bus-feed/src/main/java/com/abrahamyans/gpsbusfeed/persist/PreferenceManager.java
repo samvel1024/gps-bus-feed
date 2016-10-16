@@ -27,7 +27,6 @@ public class PreferenceManager {
 
     public PreferenceManager(Context context) {
         this.prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        prefs.edit().clear().apply();
     }
 
     public synchronized Date getLastLocationRequestDate() {
@@ -51,7 +50,7 @@ public class PreferenceManager {
     }
 
     public synchronized boolean isTrackingEnabled(){
-        Log.d("PreferenceManager", "requested state");
+        Log.d("PreferenceManager", "current state " + prefs.getAll());
         return prefs.getBoolean(PREF_TRACKING_ENABLED, false);
     }
 

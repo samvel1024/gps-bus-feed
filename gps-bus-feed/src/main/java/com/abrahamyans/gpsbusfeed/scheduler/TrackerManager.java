@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.abrahamyans.gpsbusfeed.event.GpsBusFeed;
 import com.abrahamyans.gpsbusfeed.persist.PreferenceManager;
 import com.abrahamyans.gpsbusfeed.persist.SerializationManager;
 
@@ -74,4 +75,9 @@ public class TrackerManager {
         return tracker;
     }
 
+    public void close(Context context) {
+        SerializationManager serialManager = SerializationManager.getInstance();
+        serialManager.serialize(context, tracker);
+        serialManager.serialize(context, GpsBusFeed.getInstance(context));
+    }
 }

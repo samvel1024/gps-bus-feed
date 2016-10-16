@@ -50,7 +50,7 @@ public class LocationService extends Service implements
     public void onCreate() {
         Log.d(TAG, "Created LocationService");
         super.onCreate();
-        feed = GpsBusFeed.getInstance();
+        feed = GpsBusFeed.getInstance(getApplicationContext());
         tracker = TrackerManager.getInstance(getApplicationContext()).getRunningTracker();
         apiProvider = new LocationApiProvider(this, this.getBaseContext());
     }

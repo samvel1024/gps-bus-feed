@@ -47,6 +47,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             nextDate = getDateForImmediate();
         }
         scheduleLocationBroadcast(context, nextDate);
+        trackerManager.close(context);
     }
 
     private void scheduleLocationBroadcast(Context context, Date date) {
@@ -70,5 +71,6 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         cal.add(Calendar.MILLISECOND, 500);
         return cal.getTime();
     }
+
 
 }

@@ -33,7 +33,7 @@ public class SerializationManager {
         try {
             return (T) SerializationUtils.deserialize(ctx.openFileInput(getFileName(klass)));
         } catch (FileNotFoundException e) {
-            throw new IllegalStateException("File not found", e);
+            return null;
         }
     }
 

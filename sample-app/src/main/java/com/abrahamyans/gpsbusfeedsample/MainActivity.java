@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        feed = GpsBusFeed.getInstance();
+        feed = GpsBusFeed.getInstance(getApplicationContext());
         trackerManager = TrackerManager.getInstance(this);
 
     }

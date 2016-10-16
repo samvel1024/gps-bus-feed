@@ -1,8 +1,10 @@
 package com.abrahamyans.gpsbusfeed.event;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.abrahamyans.gpsbusfeed.persist.SerializationManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 
@@ -19,7 +21,7 @@ public class GpsBusFeed implements Serializable {
 
     private static final long serialVersionUID = 4067049333336042083L;
 
-    private static final GpsBusFeed instance = new GpsBusFeed();
+    private static GpsBusFeed instance;
 
     private transient Bus bus = new Bus(ThreadEnforcer.MAIN, "GpsBusFeed");
 
@@ -34,7 +36,11 @@ public class GpsBusFeed implements Serializable {
         super();
     }
 
-    public static GpsBusFeed getInstance() {
+    public static GpsBusFeed getInstance(Context context) {
+        if (instance != null)
+            return instance;
+        GpsBusFeed deserialized =  SerializationManager.getInstance().deserialize(context, GpsBusFeed.class);
+        instance =  deserialized == null ? new GpsBusFeed() : deserialized;
         return instance;
     }
 
