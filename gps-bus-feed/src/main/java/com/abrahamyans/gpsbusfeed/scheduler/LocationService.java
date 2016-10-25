@@ -8,12 +8,13 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.abrahamyans.gpsbusfeed.event.ErrorStatus;
-import com.abrahamyans.gpsbusfeed.event.GpsBusFeed;
-import com.abrahamyans.gpsbusfeed.event.GpsBusFeedErrorEvent;
-import com.abrahamyans.gpsbusfeed.event.LocationChangedEvent;
+import com.abrahamyans.gpsbusfeed.client.observer.event.ErrorStatus;
+import com.abrahamyans.gpsbusfeed.client.observer.SerializableBus;
+import com.abrahamyans.gpsbusfeed.client.observer.event.GpsBusFeedErrorEvent;
+import com.abrahamyans.gpsbusfeed.client.observer.event.LocationChangedEvent;
 import com.abrahamyans.gpsbusfeed.location.LocationApiListener;
 import com.abrahamyans.gpsbusfeed.location.LocationApiProvider;
+import com.abrahamyans.gpsbusfeed.client.tracker.LocationTracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationRequest;
 
@@ -26,7 +27,7 @@ public class LocationService extends Service implements
         LocationApiListener {
 
     private static final String TAG = LocationService.class.getSimpleName();
-    private GpsBusFeed feed;
+    private SerializableBus feed;
     private LocationTracker tracker;
     private LocationApiProvider apiProvider;
     private Intent wakeLock;
@@ -50,9 +51,6 @@ public class LocationService extends Service implements
     public void onCreate() {
         Log.d(TAG, "Created LocationService");
         super.onCreate();
-        feed = GpsBusFeed.getInstance(getApplicationContext());
-        tracker = TrackerManager.getInstance(getApplicationContext()).getRunningTracker();
-        apiProvider = new LocationApiProvider(this, this.getBaseContext());
     }
 
     @Override
@@ -76,7 +74,7 @@ public class LocationService extends Service implements
     public void onLocationChanged(Location location) {
         Log.d(TAG, "Changed location " + location);
         LocationChangedEvent event = new LocationChangedEvent(getApplicationContext(), location, new Date());
-        if (tracker.isValidLocationEvent(event)) {
+        if (tracker.isValidLocationEvent(event.getLocation())) {
             feed.onLocationChanged(event);
         }
         processingLocation = false;
@@ -107,7 +105,6 @@ public class LocationService extends Service implements
     }
 
     private void broadcastError(GpsBusFeedErrorEvent ev){
-        TrackerManager.getInstance(getApplicationContext()).stopTracker();
         feed.onError(ev);
     }
 }

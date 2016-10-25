@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.abrahamyans.gpsbusfeed.event.LocationChangedEvent;
+import com.abrahamyans.gpsbusfeed.client.observer.event.LocationChangedEvent;
 import com.squareup.otto.Subscribe;
 
 import java.io.Serializable;

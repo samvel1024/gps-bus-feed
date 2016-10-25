@@ -9,11 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.abrahamyans.gpsbusfeed.event.GpsBusFeed;
-import com.abrahamyans.gpsbusfeed.event.LocationChangedEvent;
-import com.abrahamyans.gpsbusfeed.scheduler.LocationTracker;
-import com.abrahamyans.gpsbusfeed.scheduler.TrackerManager;
-import com.abrahamyans.gpsbusfeed.time.EqualIntervalTiming;
+import com.abrahamyans.gpsbusfeed.client.observer.SerializableBus;
+import com.abrahamyans.gpsbusfeed.client.observer.event.LocationChangedEvent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -25,43 +22,31 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private GpsBusFeed feed;
-    private TrackerManager trackerManager;
+    private SerializableBus feed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        feed = GpsBusFeed.getInstance(getApplicationContext());
-        trackerManager = TrackerManager.getInstance(this);
+
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        feed.unregister(this);
+        feed.unsubscribe(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        feed.register(this);
+        feed.subscribe(this);
     }
 
 
     public void onTurnOnTracking(View view) {
-        if (!trackerManager.isTrackerEnabled()) {
-            trackerManager.startTracker(
-                    this,
-                    new LocationTracker.Builder()
-                            .timingStrategy(new EqualIntervalTiming(5000)).build()
-            );
-            feed.registerPermanent(new LocationEventListener());
-        } else {
-            Toast.makeText(this, "Tracker is already enabled", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Subscribe
