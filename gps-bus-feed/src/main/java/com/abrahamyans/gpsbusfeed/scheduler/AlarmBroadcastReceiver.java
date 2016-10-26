@@ -20,8 +20,9 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Received broadcast");
-        TrackerApplication app = (TrackerApplication) context.getApplicationContext();
-        app.getClientComponent().inject(this);
+        ((TrackerApplication) context.getApplicationContext()).getClientComponent().inject(this);
+
+
 
     }
 
