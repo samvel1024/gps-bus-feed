@@ -14,7 +14,7 @@ import com.abrahamyans.gpsbusfeed.client.observer.event.GpsBusFeedErrorEvent;
 import com.abrahamyans.gpsbusfeed.client.observer.event.LocationChangedEvent;
 import com.abrahamyans.gpsbusfeed.location.LocationApiListener;
 import com.abrahamyans.gpsbusfeed.location.LocationApiProvider;
-import com.abrahamyans.gpsbusfeed.client.tracker.LocationTracker;
+import com.abrahamyans.gpsbusfeed.client.tracker.LocationConfig;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationRequest;
 
@@ -28,7 +28,7 @@ public class LocationService extends Service implements
 
     private static final String TAG = LocationService.class.getSimpleName();
     private SerializableBus feed;
-    private LocationTracker tracker;
+    private LocationConfig tracker;
     private LocationApiProvider apiProvider;
     private Intent wakeLock;
     private boolean processingLocation;
