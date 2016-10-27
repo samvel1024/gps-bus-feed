@@ -31,7 +31,7 @@ public class ObserverRepository implements SingleInstanceRepository<Serializable
             return (SerializableBus) SerializationUtils.deserialize(context.openFileInput(SERIALIZED_FILE_NAME));
         } catch (FileNotFoundException e) {
             Log.d(TAG, "Serialized state not found, returning null object" + e );
-            return SerializableBus.NO_EVENT_BUS;
+            return null;
         }
     }
 

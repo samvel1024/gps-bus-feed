@@ -23,8 +23,6 @@ public class SerializableBus implements Serializable {
 
     private static final long serialVersionUID = 4067049333336042083L;
 
-    public static final SerializableBus NO_EVENT_BUS = new SerializableBus();
-
     private transient Bus bus;
 
     private transient Handler main;
@@ -101,7 +99,7 @@ public class SerializableBus implements Serializable {
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         main = new Handler(Looper.getMainLooper());
-        bus = new Bus(ThreadEnforcer.MAIN, "SerializableBus");
+        bus = new Bus(ThreadEnforcer.MAIN);
         restorePermanentListeners();
     }
 

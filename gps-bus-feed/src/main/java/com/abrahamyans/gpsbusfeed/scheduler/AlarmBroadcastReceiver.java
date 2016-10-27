@@ -16,16 +16,10 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
     private static final String TAG = AlarmBroadcastReceiver.class.getSimpleName();
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Received broadcast");
-        ((TrackerApplication) context.getApplicationContext()).getClientComponent().inject(this);
-
-
-
     }
-
 
     private Date getDateForImmediate() {
         Date curr = new Date();
@@ -34,6 +28,5 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         cal.add(Calendar.MILLISECOND, 500);
         return cal.getTime();
     }
-
 
 }
