@@ -12,12 +12,12 @@ import com.google.android.gms.location.LocationServices;
  * @author Samvel Abrahamyan
  */
 
-public class LocationApiProvider {
+public class LocationApi {
 
     private final LocationApiListener listener;
     private final GoogleApiClient apiClient;
     
-    public LocationApiProvider(LocationApiListener listener, Context context){
+    public LocationApi(LocationApiListener listener, Context context){
         this.listener = listener;
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
             apiClient = new GoogleApiClient.Builder(context)

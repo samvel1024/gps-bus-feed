@@ -1,4 +1,4 @@
-package com.abrahamyans.gpsbusfeed.scheduler;
+package com.abrahamyans.gpsbusfeed;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

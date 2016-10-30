@@ -7,7 +7,6 @@ import java.io.Serializable;
  */
 
 public interface SingleInstanceRepository<T extends Serializable> {
-
     T getSerializedInstance();
     void save(T t);
     void delete();
