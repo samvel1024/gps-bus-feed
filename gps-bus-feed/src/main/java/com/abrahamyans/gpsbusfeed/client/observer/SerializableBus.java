@@ -32,14 +32,10 @@ public class SerializableBus implements Serializable {
      */
     private final List<String> permanentListeners = new ArrayList<>();
 
-    private SerializableBus(){
-
-    }
-
     @Inject
-    public SerializableBus(Bus bus) {
+    public SerializableBus() {
         super();
-        this.bus = bus;
+        this.bus = new Bus(ThreadEnforcer.MAIN);
         this.main = new Handler(Looper.getMainLooper());
     }
 
@@ -74,8 +70,11 @@ public class SerializableBus implements Serializable {
     }
 
     public void registerPermanent(Serializable listener) {
-        permanentListeners.add(listener.getClass().getName());
-        subscribe(listener);
+        String className = listener.getClass().getName();
+        if (!permanentListeners.contains(className)) {
+            permanentListeners.add(listener.getClass().getName());
+            subscribe(listener);
+        }
     }
 
     public void subscribe(final Object listener) {

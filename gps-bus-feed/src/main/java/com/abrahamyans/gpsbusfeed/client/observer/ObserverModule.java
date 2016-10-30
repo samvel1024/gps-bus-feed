@@ -2,9 +2,6 @@ package com.abrahamyans.gpsbusfeed.client.observer;
 
 import android.content.Context;
 
-import com.squareup.otto.Bus;
-import com.squareup.otto.ThreadEnforcer;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -24,12 +21,6 @@ public class ObserverModule {
 
     @Provides
     @Singleton
-    public Bus provideBus(){
-        return new Bus(ThreadEnforcer.MAIN, "SerializableBus");
-    }
-
-    @Provides
-    @Singleton
     public ObserverRepository provideRepository(){
         return new ObserverRepository(context);
     }
@@ -37,7 +28,10 @@ public class ObserverModule {
     @Provides
     @Singleton
     public SerializableBus provideEventBus(ObserverRepository repository){
-        return repository.getSerializedInstance();
+        SerializableBus deserialized = repository.getSerializedInstance();
+        if (deserialized != null)
+            return deserialized;
+        return new SerializableBus();
     }
 
 }

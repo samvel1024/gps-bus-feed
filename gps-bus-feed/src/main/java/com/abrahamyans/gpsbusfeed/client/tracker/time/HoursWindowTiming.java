@@ -21,7 +21,7 @@ public class HoursWindowTiming implements RequestTiming{
      * @param to end time
      * @param timing the base timing strategy on top of which the bounds will be applied
      */
-    HoursWindowTiming(TimeInDay from, TimeInDay to, RequestTiming timing) {
+    public HoursWindowTiming(TimeInDay from, TimeInDay to, RequestTiming timing) {
         this.from = from;
         this.to = to;
         this.requestTiming = timing;

@@ -2,6 +2,7 @@ package com.abrahamyans.gpsbusfeed;
 
 import android.content.Context;
 
+import com.abrahamyans.gpsbusfeed.client.observer.SerializableBus;
 import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfig;
 import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfigRepository;
 
@@ -15,10 +16,12 @@ public class LocationTracker implements Serializable {
 
     private TrackerConfigRepository trackerConfigRepository;
     private PreferenceRepository preferenceRepository;
+    private SerializableBus bus;
 
-    public LocationTracker(TrackerConfigRepository trackerConfigRepository, PreferenceRepository preferenceRepository) {
+    public LocationTracker(SerializableBus bus, TrackerConfigRepository trackerConfigRepository, PreferenceRepository preferenceRepository) {
         this.trackerConfigRepository = trackerConfigRepository;
         this.preferenceRepository = preferenceRepository;
+        this.bus = bus;
     }
 
     public TrackerConfig getRunningTrackerConfig() {
@@ -42,5 +45,17 @@ public class LocationTracker implements Serializable {
         if (isTrackerRunning())
             throw new IllegalStateException("Tracker is already running");
         trackerConfigRepository.save(config);
+    }
+
+    public void subscribe(Object listener){
+        bus.subscribe(listener);
+    }
+
+    public void unsubscribe(Object listener){
+        bus.subscribe(listener);
+    }
+
+    public void subscribePermanent(Serializable listener){
+        bus.registerPermanent(listener);
     }
 }

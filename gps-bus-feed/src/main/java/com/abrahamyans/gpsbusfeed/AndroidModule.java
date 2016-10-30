@@ -3,6 +3,7 @@ package com.abrahamyans.gpsbusfeed;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.abrahamyans.gpsbusfeed.client.observer.SerializableBus;
 import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfigRepository;
 
 import javax.inject.Singleton;
@@ -37,7 +38,7 @@ public class AndroidModule {
 
     @Provides
     @Singleton
-    public LocationTracker provideLocationTracker(TrackerConfigRepository configRepository, PreferenceRepository preferenceRepository){
-        return new LocationTracker(configRepository, preferenceRepository);
+    public LocationTracker provideLocationTracker(SerializableBus bus, TrackerConfigRepository configRepository, PreferenceRepository preferenceRepository){
+        return new LocationTracker(bus, configRepository, preferenceRepository);
     }
 }
