@@ -8,6 +8,7 @@ import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfig;
 import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfigRepository;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author Samvel Abrahamyan
@@ -48,6 +49,14 @@ public class LocationTracker implements Serializable {
         trackerConfigRepository.save(config);
         preferenceRepository.setTrackerRunningState(true);
         context.sendBroadcast(new Intent(context, AlarmBroadcastReceiver.class));
+    }
+
+    public Date getLastRequestDate(){
+        return preferenceRepository.getLastRequestDate();
+    }
+
+    public void setLastRequestDate(Date date){
+        preferenceRepository.setLastRequestDate(date);
     }
 
     public void subscribe(Object listener){

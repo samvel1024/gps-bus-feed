@@ -17,7 +17,7 @@ public class TrackerConfigRepository implements SingleInstanceRepository<Tracker
 
     private static final String TAG = "TrackerConfigRepository";
 
-    private static final String SERIALIZED_FILE_NAME = "location_tracker.ser";
+    private static final String SERIALIZED_FILE_NAME = "tracker_config.ser";
 
     private Context context;
 
