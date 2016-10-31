@@ -9,8 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.abrahamyans.gpsbusfeed.client.observer.SerializableBus;
+import com.abrahamyans.gpsbusfeed.LocationTracker;
 import com.abrahamyans.gpsbusfeed.client.observer.event.LocationChangedEvent;
+import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfig;
+import com.abrahamyans.gpsbusfeed.client.tracker.time.EqualIntervalTiming;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -20,33 +22,46 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 public class MainActivity extends AppCompatActivity {
 
-    private SerializableBus feed;
+    @Inject
+    LocationTracker tracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        ((MyApplication) this.getApplicationContext()).getGpsBusFeedComponent().inject(this);
 
     }
 
     @Override
     protected void onStop() {
+        tracker.unsubscribe(this);
         super.onStop();
-        feed.unsubscribe(this);
     }
 
     @Override
     protected void onStart() {
+        tracker.subscribe(this);
         super.onStart();
-        feed.subscribe(this);
     }
 
 
     public void onTurnOnTracking(View view) {
+        if (!tracker.isTrackerRunning()) {
+            tracker.startTracker(
+                    this,
+                    new TrackerConfig.Builder()
+                            .timingStrategy(new EqualIntervalTiming(5000))
+                            .build()
+            );
+            tracker.subscribePermanent(new LocationEventListener());
+        } else {
+            Toast.makeText(this, "Tracker is already running", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Subscribe
@@ -72,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         List<String> historyList = new ArrayList<>();
         List<String> keyList = new ArrayList<>();
 
-        for(String k: history.keySet())
+        for (String k : history.keySet())
             keyList.add(k);
 
         Collections.sort(keyList);

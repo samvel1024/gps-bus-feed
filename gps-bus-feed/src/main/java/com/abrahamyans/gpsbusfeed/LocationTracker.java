@@ -1,6 +1,7 @@
 package com.abrahamyans.gpsbusfeed;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.abrahamyans.gpsbusfeed.client.observer.SerializableBus;
 import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfig;
@@ -45,6 +46,8 @@ public class LocationTracker implements Serializable {
         if (isTrackerRunning())
             throw new IllegalStateException("Tracker is already running");
         trackerConfigRepository.save(config);
+        preferenceRepository.setTrackerRunningState(true);
+        context.sendBroadcast(new Intent(context, AlarmBroadcastReceiver.class));
     }
 
     public void subscribe(Object listener){
@@ -52,7 +55,7 @@ public class LocationTracker implements Serializable {
     }
 
     public void unsubscribe(Object listener){
-        bus.subscribe(listener);
+        bus.unsubscribe(listener);
     }
 
     public void subscribePermanent(Serializable listener){
