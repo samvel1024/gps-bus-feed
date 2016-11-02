@@ -8,6 +8,6 @@ import java.io.Serializable;
  * @author Samvel Abrahamyan
  */
 
-public interface LocationEventFilter extends Serializable{
+public interface LocationEventFilter extends Serializable {
     boolean shouldBroadcastLocation(Location location);
 }

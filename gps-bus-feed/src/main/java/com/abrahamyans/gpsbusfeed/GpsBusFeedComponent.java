@@ -14,5 +14,7 @@ import dagger.Component;
 @Singleton
 public interface GpsBusFeedComponent {
     void inject(LocationService service);
+
     void inject(AlarmBroadcastReceiver receiver);
+//    LocationTracker getTracker();
 }

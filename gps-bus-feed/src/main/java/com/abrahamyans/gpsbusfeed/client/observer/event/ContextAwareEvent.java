@@ -9,7 +9,7 @@ public abstract class ContextAwareEvent {
 
     private Context context;
 
-    public ContextAwareEvent(Context context){
+    public ContextAwareEvent(Context context) {
         this.context = context;
     }
 

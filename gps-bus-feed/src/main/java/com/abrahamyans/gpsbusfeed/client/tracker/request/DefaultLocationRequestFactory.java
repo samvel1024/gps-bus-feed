@@ -10,7 +10,7 @@ public class DefaultLocationRequestFactory implements LocationRequestFactory {
 
     private static final long serialVersionUID = -5074601265762139753L;
 
-    public DefaultLocationRequestFactory(){
+    public DefaultLocationRequestFactory() {
         super();
     }
 

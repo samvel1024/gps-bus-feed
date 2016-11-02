@@ -2,6 +2,7 @@ package com.abrahamyans.gpsbusfeed.client.observer;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.abrahamyans.gpsbusfeed.client.observer.event.GpsBusFeedErrorEvent;
 import com.abrahamyans.gpsbusfeed.client.observer.event.LocationChangedEvent;
@@ -22,15 +23,12 @@ import javax.inject.Inject;
 public class SerializableBus implements Serializable {
 
     private static final long serialVersionUID = 4067049333336042083L;
-
-    private transient Bus bus;
-
-    private transient Handler main;
-
     /**
      * Contains class names of all registered permanent listeners
      */
     private final List<String> permanentListeners = new ArrayList<>();
+    private transient Bus bus;
+    private transient Handler main;
 
     @Inject
     public SerializableBus() {
@@ -102,7 +100,7 @@ public class SerializableBus implements Serializable {
         restorePermanentListeners();
     }
 
-    private void restorePermanentListeners(){
+    private void restorePermanentListeners() {
         for (String className : permanentListeners) {
             try {
                 subscribe(Class.forName(className).newInstance());
@@ -110,5 +108,7 @@ public class SerializableBus implements Serializable {
                 throw new IllegalStateException("Could not instantiate class " + className, e);
             }
         }
+        Log.d("SerializableListeners", permanentListeners.toString());
+
     }
 }

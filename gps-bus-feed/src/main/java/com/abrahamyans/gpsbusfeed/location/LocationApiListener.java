@@ -7,5 +7,5 @@ import com.google.android.gms.location.LocationListener;
  * @author Samvel Abrahamyan
  */
 
-public interface LocationApiListener extends GoogleApiClient.OnConnectionFailedListener , GoogleApiClient.ConnectionCallbacks, LocationListener {
+public interface LocationApiListener extends GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
 }

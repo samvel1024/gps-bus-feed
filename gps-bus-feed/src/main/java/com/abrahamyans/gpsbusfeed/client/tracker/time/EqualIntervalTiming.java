@@ -22,14 +22,13 @@ public class EqualIntervalTiming implements RequestTiming {
 
     @Override
     public RequestDate nextRequestDate(Date lastRequestDate) {
-        lastRequestDate = lastRequestDate == null ? new Date(): lastRequestDate;
+        lastRequestDate = lastRequestDate == null ? new Date() : lastRequestDate;
         Calendar cal = Calendar.getInstance();
         cal.setTime(lastRequestDate);
         cal.add(Calendar.MILLISECOND, deltaMillis);
 
         return new RequestDate(cal.getTime());
     }
-
 
 
 }

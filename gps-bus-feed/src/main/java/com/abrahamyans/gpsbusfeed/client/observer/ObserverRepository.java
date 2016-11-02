@@ -21,16 +21,18 @@ public class ObserverRepository implements SingleInstanceRepository<Serializable
 
     private Context context;
 
-    public ObserverRepository(Context context){
+    public ObserverRepository(Context context) {
         this.context = context;
     }
 
     @Override
     public SerializableBus getSerializedInstance() {
         try {
-            return (SerializableBus) SerializationUtils.deserialize(context.openFileInput(SERIALIZED_FILE_NAME));
+            SerializableBus bus = (SerializableBus) SerializationUtils.deserialize(context.openFileInput(SERIALIZED_FILE_NAME));
+            Log.d(TAG, "Found serialized state");
+            return bus;
         } catch (FileNotFoundException e) {
-            Log.d(TAG, "Serialized state not found, returning null object" + e );
+            Log.d(TAG, "Serialized state not found, returning null object");
             return null;
         }
     }
@@ -47,7 +49,7 @@ public class ObserverRepository implements SingleInstanceRepository<Serializable
     @Override
     public void delete() {
         boolean success = context.deleteFile(SERIALIZED_FILE_NAME);
-        if (!success){
+        if (!success) {
             throw new IllegalStateException("Could not delete file " + SERIALIZED_FILE_NAME);
         }
     }

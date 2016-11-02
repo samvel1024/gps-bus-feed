@@ -31,16 +31,22 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         Log.d(TAG, "Received broadcast");
         ((TrackerAwareApplication) context.getApplicationContext()).getGpsBusFeedComponent().inject(this);
 
-        if (!currentTracker.isTrackerRunning()){
+        if (!currentTracker.isTrackerRunning()) {
             Log.d(TAG, "Tracker stop requested, shutting down tracker...");
             return;
         }
 
         context.startService(new Intent(context, LocationService.class));
-
         TrackerConfig config = currentTracker.getRunningTrackerConfig();
         Date lastRequestDate = currentTracker.getLastRequestDate();
         Date nextRequestDate = extractDate(config.getNextRequestDate(lastRequestDate));
+        Log.d(
+                TAG,
+                String.format("lastRequestDate: %s, nextRequestDate: %s, currentDate: %s",
+                        lastRequestDate,
+                        nextRequestDate,
+                        new Date())
+        );
         if (nextRequestDate != null) {
             scheduleLocationBroadcast(context, nextRequestDate);
             currentTracker.setLastRequestDate(nextRequestDate);
@@ -48,11 +54,11 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     }
 
 
-    private Date extractDate(RequestDate requestDate){
-        if (requestDate.isDatePresent()){
+    private Date extractDate(RequestDate requestDate) {
+        if (requestDate.isDatePresent()) {
             return requestDate.getDate();
         }
-        if (requestDate == RequestDate.IMMEDIATELY){
+        if (requestDate == RequestDate.IMMEDIATELY) {
             return getDateForImmediate();
         }
         return null;

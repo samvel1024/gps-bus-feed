@@ -22,7 +22,7 @@ public class TrackerConfigRepositoryTest {
     private final Context context = InstrumentationRegistry.getContext();
 
     @Test
-    public void testLocationTrackerSerialization(){
+    public void testLocationTrackerSerialization() {
         TrackerConfigRepository repository = new TrackerConfigRepository(context);
 
         TrackerConfig config = new TrackerConfig.Builder()

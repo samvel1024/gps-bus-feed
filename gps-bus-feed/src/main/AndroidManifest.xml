@@ -1,17 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.abrahamyans.gpsbusfeed">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true">
 
-        <service android:name="com.abrahamyans.gpsbusfeed.LocationService"/>
-        <receiver android:name="com.abrahamyans.gpsbusfeed.AlarmBroadcastReceiver"/>
+        <service android:name="com.abrahamyans.gpsbusfeed.LocationService" />
+        <receiver android:name="com.abrahamyans.gpsbusfeed.AlarmBroadcastReceiver" />
     </application>
 
 </manifest>
