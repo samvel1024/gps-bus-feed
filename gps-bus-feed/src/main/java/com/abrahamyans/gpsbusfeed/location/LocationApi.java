@@ -16,8 +16,8 @@ public class LocationApi {
 
     private final LocationApiListener listener;
     private final GoogleApiClient apiClient;
-    
-    public LocationApi(LocationApiListener listener, Context context){
+
+    public LocationApi(LocationApiListener listener, Context context) {
         this.listener = listener;
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
             apiClient = new GoogleApiClient.Builder(context)
@@ -30,21 +30,21 @@ public class LocationApi {
         }
     }
 
-    public void requestLocation(LocationRequest locationRequest){
-        try{
+    public void requestLocation(LocationRequest locationRequest) {
+        try {
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     apiClient, locationRequest, listener);
-        }catch (SecurityException e){
+        } catch (SecurityException e) {
             throw new IllegalStateException("Could not access location services", e);
         }
     }
 
-    public void disconnect(){
+    public void disconnect() {
         apiClient.disconnect();
     }
 
-    public void connect(){
-        if(!apiClient.isConnected() || !apiClient.isConnecting())
+    public void connect() {
+        if (!apiClient.isConnected() || !apiClient.isConnecting())
             apiClient.connect();
     }
 }

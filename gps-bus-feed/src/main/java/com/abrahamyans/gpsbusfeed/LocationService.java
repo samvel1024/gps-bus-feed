@@ -43,7 +43,7 @@ public class LocationService extends Service implements
         locationApi.disconnect();
     }
 
-    private void requestLocation(){
+    private void requestLocation() {
         Log.d(TAG, "Requesting location");
         LocationRequest locationRequest = tracker.getRunningTrackerConfig().createLocationRequest();
         locationApi.requestLocation(locationRequest);
@@ -60,9 +60,9 @@ public class LocationService extends Service implements
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (processingLocation){
+        if (processingLocation) {
             Log.w(TAG, "Skipping location request, service is busy processing location");
-        }else {
+        } else {
             this.wakeLock = intent;
             locationApi.connect();
         }
@@ -109,7 +109,7 @@ public class LocationService extends Service implements
         Log.e(TAG, "Connection has been suspended");
     }
 
-    private void broadcastError(GpsBusFeedErrorEvent ev){
+    private void broadcastError(GpsBusFeedErrorEvent ev) {
         feed.onError(ev);
     }
 }

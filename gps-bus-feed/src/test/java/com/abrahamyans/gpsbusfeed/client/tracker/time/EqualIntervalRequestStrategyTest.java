@@ -14,7 +14,7 @@ import java.util.Date;
 public class EqualIntervalRequestStrategyTest {
 
     @Test
-    public void testEqualIntervalTiming(){
+    public void testEqualIntervalTiming() {
         EqualIntervalTiming timing = new EqualIntervalTiming(4000);
         Date currentDate = TimeTestHelper.composeDate(2016, 10, 1, 9, 57, 1);
         RequestDate requestDate = timing.nextRequestDate(currentDate);

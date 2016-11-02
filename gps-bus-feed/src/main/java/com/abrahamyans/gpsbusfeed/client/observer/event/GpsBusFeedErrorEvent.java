@@ -8,13 +8,13 @@ public class GpsBusFeedErrorEvent {
     private String message;
     private ErrorStatus status;
 
-    public GpsBusFeedErrorEvent(ErrorStatus status){
+    public GpsBusFeedErrorEvent(ErrorStatus status) {
         this(status, null);
     }
 
-    public GpsBusFeedErrorEvent(ErrorStatus status, String message){
+    public GpsBusFeedErrorEvent(ErrorStatus status, String message) {
         this.status = status;
-        this.message = message != null ?message : status.getDefaultMessage();
+        this.message = message != null ? message : status.getDefaultMessage();
     }
 
     public String getMessage() {

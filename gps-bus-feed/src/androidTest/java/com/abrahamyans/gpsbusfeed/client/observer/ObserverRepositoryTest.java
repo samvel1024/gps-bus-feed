@@ -43,7 +43,6 @@ public class ObserverRepositoryTest extends TestCase {
         deserializedBus.onLocationChanged(new LocationChangedEvent(context, new Location("Test"), new Date()));
 
 
-
     }
 
 

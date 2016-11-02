@@ -38,11 +38,11 @@ public class TimeInDay implements Comparable<TimeInDay>, Serializable {
         this.second = second;
     }
 
-    public static TimeInDay startOfDay(){
+    public static TimeInDay startOfDay() {
         return new TimeInDay(0, 0, 0);
     }
 
-    public static TimeInDay endOfDay(){
+    public static TimeInDay endOfDay() {
         return new TimeInDay(23, 59, 59);
     }
 

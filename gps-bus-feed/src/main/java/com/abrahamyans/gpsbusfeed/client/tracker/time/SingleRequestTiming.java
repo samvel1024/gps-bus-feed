@@ -10,7 +10,7 @@ public class SingleRequestTiming implements RequestTiming {
 
     private static final long serialVersionUID = 8220289725482643645L;
 
-    public SingleRequestTiming(){
+    public SingleRequestTiming() {
         super();
     }
 

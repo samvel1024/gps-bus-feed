@@ -19,28 +19,29 @@ import java.util.List;
  * @author Samvel Abrahamyan
  */
 
-public class TrackerConfig implements Serializable{
+public class TrackerConfig implements Serializable {
 
     private static final long serialVersionUID = -480534867039443386L;
+    public static TrackerConfig NO_CONFIG = new TrackerConfig();
     private List<LocationEventFilter> filters;
     private RequestTiming timing;
     private LocationRequestFactory requestFactory;
 
-    private TrackerConfig(){
+    private TrackerConfig() {
         super();
     }
 
-    public RequestDate getNextRequestDate(Date lastRequestDate){
+    public RequestDate getNextRequestDate(Date lastRequestDate) {
         return timing.nextRequestDate(lastRequestDate);
     }
 
-    public LocationRequest createLocationRequest(){
+    public LocationRequest createLocationRequest() {
         return requestFactory.createLocationRequest();
     }
 
-    public boolean isValidLocationEvent(Location location){
+    public boolean isValidLocationEvent(Location location) {
         boolean isValid = true;
-        for (LocationEventFilter filter: filters)
+        for (LocationEventFilter filter : filters)
             isValid &= filter.shouldBroadcastLocation(location);
         return isValid;
     }
@@ -52,7 +53,7 @@ public class TrackerConfig implements Serializable{
         private LocationRequestFactory requestFactory;
 
 
-        public Builder timingStrategy(RequestTiming timing){
+        public Builder timingStrategy(RequestTiming timing) {
             if (timing == null)
                 throw new IllegalArgumentException("timing cannot be null");
             verifyIsNotOverridden(this.timingStrategy, "timingStrategy");
@@ -60,14 +61,14 @@ public class TrackerConfig implements Serializable{
             return this;
         }
 
-        public Builder filter(LocationEventFilter locationEventFilter){
+        public Builder filter(LocationEventFilter locationEventFilter) {
             if (locationEventFilter == null)
                 throw new IllegalArgumentException("locationEventFilter cannot be null");
             this.locationEventFilters.add(locationEventFilter);
             return this;
         }
 
-        public Builder requestFactory(DefaultLocationRequestFactory factory){
+        public Builder requestFactory(DefaultLocationRequestFactory factory) {
             if (factory == null)
                 throw new IllegalArgumentException("factory cannot be null");
             verifyIsNotOverridden(this.requestFactory, "requestFactory");
@@ -75,15 +76,15 @@ public class TrackerConfig implements Serializable{
             return this;
         }
 
-        private void verifyIsNotOverridden(Object val, String field){
+        private void verifyIsNotOverridden(Object val, String field) {
             if (val != null)
                 throw new IllegalStateException("Field " + field + " is already set");
         }
 
-        public TrackerConfig build(){
+        public TrackerConfig build() {
             TrackerConfig trackerConfig = new TrackerConfig();
             trackerConfig.filters = locationEventFilters;
-            trackerConfig.timing = timingStrategy == null ? new SingleRequestTiming(): timingStrategy;
+            trackerConfig.timing = timingStrategy == null ? new SingleRequestTiming() : timingStrategy;
             trackerConfig.requestFactory = requestFactory == null ? new DefaultLocationRequestFactory() : requestFactory;
             return trackerConfig;
         }

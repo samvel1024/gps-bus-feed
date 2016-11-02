@@ -21,16 +21,18 @@ public class TrackerConfigRepository implements SingleInstanceRepository<Tracker
 
     private Context context;
 
-    public TrackerConfigRepository(Context context){
+    public TrackerConfigRepository(Context context) {
         this.context = context;
     }
 
     @Override
     public TrackerConfig getSerializedInstance() {
         try {
-            return (TrackerConfig) SerializationUtils.deserialize(context.openFileInput(SERIALIZED_FILE_NAME));
+            TrackerConfig config = (TrackerConfig) SerializationUtils.deserialize(context.openFileInput(SERIALIZED_FILE_NAME));
+            Log.d(TAG, "Found serialized state");
+            return config;
         } catch (FileNotFoundException e) {
-            Log.d(TAG, "Serialized state not found, returning null object" + e );
+            Log.d(TAG, "Serialized state not found, returning null object");
             return null;
         }
     }
@@ -47,7 +49,7 @@ public class TrackerConfigRepository implements SingleInstanceRepository<Tracker
     @Override
     public void delete() {
         boolean success = context.deleteFile(SERIALIZED_FILE_NAME);
-        if (!success){
+        if (!success) {
             throw new IllegalStateException("Could not delete file " + SERIALIZED_FILE_NAME);
         }
     }

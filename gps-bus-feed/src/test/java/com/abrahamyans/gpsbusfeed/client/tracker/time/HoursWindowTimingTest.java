@@ -17,7 +17,7 @@ import static com.abrahamyans.gpsbusfeed.client.tracker.time.TimeTestHelper.from
 public class HoursWindowTimingTest {
 
     @Test
-    public void testNextMidnightExcludedWithOverflow(){
+    public void testNextMidnightExcludedWithOverflow() {
         HoursWindowTiming strategy = new HoursWindowTiming(
                 new TimeInDay(10, 0),
                 new TimeInDay(21, 0),

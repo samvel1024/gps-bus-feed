@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * @author Samvel Abrahamyan
  */
-public class LocationChangedEvent extends ContextAwareEvent{
+public class LocationChangedEvent extends ContextAwareEvent {
     private Date date;
     private Location location;
 

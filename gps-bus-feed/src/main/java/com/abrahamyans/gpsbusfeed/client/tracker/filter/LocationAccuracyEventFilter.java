@@ -12,7 +12,7 @@ public class LocationAccuracyEventFilter implements LocationEventFilter {
 
     private final float maximumRadius;
 
-    public LocationAccuracyEventFilter(float maximumRadius){
+    public LocationAccuracyEventFilter(float maximumRadius) {
         if (maximumRadius <= 0)
             throw new IllegalArgumentException("Invalid value " + maximumRadius + " for minimumAccuracy");
         this.maximumRadius = maximumRadius;

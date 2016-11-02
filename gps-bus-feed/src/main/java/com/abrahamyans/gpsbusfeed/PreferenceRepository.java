@@ -13,23 +13,23 @@ import java.util.Locale;
 
 public class PreferenceRepository {
 
-    private static final String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     private SharedPreferences preferences;
 
-    public PreferenceRepository(SharedPreferences preferences){
+    public PreferenceRepository(SharedPreferences preferences) {
         this.preferences = preferences;
     }
 
-    public boolean isTrackerRunning(){
+    public boolean isTrackerRunning() {
         return preferences.getBoolean("tracker_enabled", false);
     }
 
-    public void setTrackerRunningState(boolean state){
+    public void setTrackerRunningState(boolean state) {
         preferences.edit().putBoolean("tracker_enabled", state).apply();
     }
 
-    public Date getLastRequestDate(){
+    public Date getLastRequestDate() {
         String dateStr = preferences.getString("last_request_date", null);
         if (dateStr == null)
             return null;
@@ -42,7 +42,7 @@ public class PreferenceRepository {
 
     }
 
-    public void setLastRequestDate(Date date){
+    public void setLastRequestDate(Date date) {
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT, Locale.US);
         preferences.edit().putString("last_request_date", format.format(date)).apply();
     }
