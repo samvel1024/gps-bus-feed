@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.abrahamyans.gpsbusfeed.LocationTracker;
 import com.abrahamyans.gpsbusfeed.client.observer.event.LocationChangedEvent;
-import com.abrahamyans.gpsbusfeed.client.tracker.time.EqualIntervalTiming;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //
 //            );
-            tracker.subscribePermanent(new LocationEventListener());
+//            tracker.subscribePermanent(new LocationEventListener());
         } else {
             Toast.makeText(this, "Tracker is already running", Toast.LENGTH_SHORT).show();
         }
