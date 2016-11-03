@@ -2,7 +2,6 @@ package com.abrahamyans.gpsbusfeed.client.observer;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.abrahamyans.gpsbusfeed.client.observer.event.GpsBusFeedErrorEvent;
 import com.abrahamyans.gpsbusfeed.client.observer.event.LocationChangedEvent;
@@ -108,7 +107,5 @@ public class SerializableBus implements Serializable {
                 throw new IllegalStateException("Could not instantiate class " + className, e);
             }
         }
-        Log.d("SerializableListeners", permanentListeners.toString());
-
     }
 }

@@ -31,4 +31,8 @@ public class EqualIntervalTiming implements RequestTiming {
     }
 
 
+    public static EqualIntervalTiming onEveryMillis(int deltaMillis){
+        return new EqualIntervalTiming(deltaMillis);
+    }
+
 }

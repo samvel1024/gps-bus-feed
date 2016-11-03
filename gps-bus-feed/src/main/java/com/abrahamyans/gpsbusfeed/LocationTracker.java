@@ -1,6 +1,5 @@
 package com.abrahamyans.gpsbusfeed;
 
-import android.content.Context;
 import android.content.Intent;
 
 import com.abrahamyans.gpsbusfeed.client.observer.ObserverRepository;
@@ -9,9 +8,7 @@ import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfig;
 import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfigRepository;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Samvel Abrahamyan
@@ -55,7 +52,7 @@ public class LocationTracker implements Serializable {
         trackerConfigRepository.delete();
     }
 
-    public void startTracker(Context context, ConfigBuilder configBuilder) {
+    public void startTracker(ConfigBuilder configBuilder) {
         if (isTrackerRunning())
             throw new IllegalStateException("Tracker is already running");
         this.trackerConfig = configBuilder.build();
@@ -64,7 +61,7 @@ public class LocationTracker implements Serializable {
         observerRepository.save(bus);
 
         preferenceRepository.setTrackerRunningState(true);
-        context.sendBroadcast(new Intent(context, AlarmBroadcastReceiver.class));
+        configBuilder.context.sendBroadcast(new Intent(configBuilder.context, AlarmBroadcastReceiver.class));
     }
 
     private void registerPermanentListeners(ConfigBuilder builder){
@@ -93,20 +90,5 @@ public class LocationTracker implements Serializable {
         bus.unsubscribe(listener);
     }
 
-    public static class ConfigBuilder extends TrackerConfig.Builder {
 
-        private transient List<Class<? extends Serializable>> permanentListeners = new ArrayList<>();
-
-        public ConfigBuilder() {
-            super();
-        }
-
-        public ConfigBuilder permanentListener(Class<? extends Serializable> listenerClass){
-            if (listenerClass == null)
-                throw new IllegalArgumentException("listenerClass cannot be null");
-            permanentListeners.add(listenerClass);
-            return this;
-        }
-
-    }
 }

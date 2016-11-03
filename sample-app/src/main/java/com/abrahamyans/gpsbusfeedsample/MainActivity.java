@@ -9,8 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.abrahamyans.gpsbusfeed.ConfigBuilder;
 import com.abrahamyans.gpsbusfeed.LocationTracker;
 import com.abrahamyans.gpsbusfeed.client.observer.event.LocationChangedEvent;
+import com.abrahamyans.gpsbusfeed.client.tracker.filter.LocationAccuracyEventFilter;
+import com.abrahamyans.gpsbusfeed.client.tracker.request.DefaultLocationRequestFactory;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -21,6 +24,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+
+import static com.abrahamyans.gpsbusfeed.ConfigBuilder.withContext;
+import static com.abrahamyans.gpsbusfeed.client.tracker.time.EqualIntervalTiming.onEveryMillis;
+import static com.abrahamyans.gpsbusfeed.client.tracker.time.HoursWindowTiming.from;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,15 +57,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void onTurnOnTracking(View view) {
         if (!tracker.isTrackerRunning()) {
-            //TODO think of clever builder subclassing pattern
-//            tracker.startTracker(
-//                    this,
-//                    new LocationTracker.ConfigBuilder()
-//                            .timingStrategy(new EqualIntervalTiming(5000))
-//
-//
-//            );
-//            tracker.subscribePermanent(new LocationEventListener());
+            ConfigBuilder trackerConfig =
+                    withContext(this)
+                            .timingStrategy(from(22, 0).to(5, 20).timing(onEveryMillis(5000)).build())
+                            .filter(new LocationAccuracyEventFilter(500))
+                            .requestFactory(new DefaultLocationRequestFactory())
+                            .permanentListener(LocationEventListener.class);
+            tracker.startTracker(trackerConfig);
         } else {
             Toast.makeText(this, "Tracker is already running", Toast.LENGTH_SHORT).show();
         }

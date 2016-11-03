@@ -23,6 +23,8 @@ public class HoursWindowTiming implements RequestTiming {
      * @param timing the base timing strategy on top of which the bounds will be applied
      */
     public HoursWindowTiming(TimeInDay from, TimeInDay to, RequestTiming timing) {
+        if (from == null || to == null || timing == null)
+            throw new IllegalArgumentException("None of the arguments can be null");
         this.from = from;
         this.to = to;
         this.requestTiming = timing;
@@ -38,7 +40,7 @@ public class HoursWindowTiming implements RequestTiming {
             return date;
 
         Calendar cal = Calendar.getInstance();
-        cal.setTime(lastRequestDate);
+        cal.setTime(date.getDate());
         cal.add(Calendar.DAY_OF_MONTH, isMidnightIncluded ? 0 : 1);
         cal.set(Calendar.HOUR_OF_DAY, from.getHour());
         cal.set(Calendar.MINUTE, from.getMinute());
@@ -55,5 +57,36 @@ public class HoursWindowTiming implements RequestTiming {
         return isMidnightIncluded ^ (nextProposedTime.compareTo(sooner) >= 0 && nextProposedTime.compareTo(later) <= 0);
     }
 
+
+    public static Builder from(int h, int m){
+        return new Builder(new TimeInDay(h, m));
+    }
+
+    public static class Builder{
+
+        TimeInDay from;
+        TimeInDay to;
+        RequestTiming timing;
+
+        private Builder(TimeInDay from){
+            this.from = from;
+        }
+
+        public Builder to(int h, int m){
+            this.to = new TimeInDay(h, m);
+            return this;
+        }
+
+        public Builder timing(RequestTiming timing){
+            this.timing = timing;
+            return this;
+        }
+
+        public HoursWindowTiming build(){
+            return new HoursWindowTiming(from, to, timing);
+        }
+
+
+    }
 
 }
