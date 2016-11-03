@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.abrahamyans.gpsbusfeed.LocationTracker;
 import com.abrahamyans.gpsbusfeed.client.observer.event.LocationChangedEvent;
-import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfig;
 import com.abrahamyans.gpsbusfeed.client.tracker.time.EqualIntervalTiming;
 import com.squareup.otto.Subscribe;
 
@@ -52,12 +51,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void onTurnOnTracking(View view) {
         if (!tracker.isTrackerRunning()) {
-            tracker.startTracker(
-                    this,
-                    new TrackerConfig.Builder()
-                            .timingStrategy(new EqualIntervalTiming(5000))
-                            .build()
-            );
+            //TODO think of clever builder subclassing pattern
+//            tracker.startTracker(
+//                    this,
+//                    new LocationTracker.ConfigBuilder()
+//                            .timingStrategy(new EqualIntervalTiming(5000))
+//
+//
+//            );
             tracker.subscribePermanent(new LocationEventListener());
         } else {
             Toast.makeText(this, "Tracker is already running", Toast.LENGTH_SHORT).show();

@@ -9,7 +9,9 @@ import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfig;
 import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfigRepository;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Samvel Abrahamyan
@@ -53,13 +55,26 @@ public class LocationTracker implements Serializable {
         trackerConfigRepository.delete();
     }
 
-    public void startTracker(Context context, TrackerConfig config) {
+    public void startTracker(Context context, ConfigBuilder configBuilder) {
         if (isTrackerRunning())
             throw new IllegalStateException("Tracker is already running");
-        this.trackerConfig = config;
-        trackerConfigRepository.save(config);
+        this.trackerConfig = configBuilder.build();
+        trackerConfigRepository.save(trackerConfig);
+        registerPermanentListeners(configBuilder);
+        observerRepository.save(bus);
+
         preferenceRepository.setTrackerRunningState(true);
         context.sendBroadcast(new Intent(context, AlarmBroadcastReceiver.class));
+    }
+
+    private void registerPermanentListeners(ConfigBuilder builder){
+        for (Class<? extends Serializable> listenerClass: builder.permanentListeners){
+            try {
+                bus.registerPermanent(listenerClass.newInstance());
+            } catch (Exception e) {
+                throw new IllegalStateException(listenerClass.getName() + " should have public empty constructor");
+            }
+        }
     }
 
     public Date getLastRequestDate() {
@@ -78,8 +93,20 @@ public class LocationTracker implements Serializable {
         bus.unsubscribe(listener);
     }
 
-    public void subscribePermanent(Serializable listener) {
-        bus.registerPermanent(listener);
-        observerRepository.save(bus);
+    public static class ConfigBuilder extends TrackerConfig.Builder {
+
+        private transient List<Class<? extends Serializable>> permanentListeners = new ArrayList<>();
+
+        public ConfigBuilder() {
+            super();
+        }
+
+        public ConfigBuilder permanentListener(Class<? extends Serializable> listenerClass){
+            if (listenerClass == null)
+                throw new IllegalArgumentException("listenerClass cannot be null");
+            permanentListeners.add(listenerClass);
+            return this;
+        }
+
     }
 }
