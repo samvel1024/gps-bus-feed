@@ -81,6 +81,5 @@ public class LocationTracker implements Serializable {
     public void subscribePermanent(Serializable listener) {
         bus.registerPermanent(listener);
         observerRepository.save(bus);
-
     }
 }
