@@ -27,7 +27,7 @@ import javax.inject.Inject;
 
 import static com.abrahamyans.gpsbusfeed.ConfigBuilder.withContext;
 import static com.abrahamyans.gpsbusfeed.client.tracker.time.EqualIntervalTiming.onEveryMillis;
-import static com.abrahamyans.gpsbusfeed.client.tracker.time.HoursWindowTiming.from;
+import static com.abrahamyans.gpsbusfeed.client.tracker.time.HoursWindowTiming.withTiming;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         if (!tracker.isTrackerRunning()) {
             ConfigBuilder trackerConfig =
                     withContext(this)
-                            .timingStrategy(from(22, 0).to(5, 20).timing(onEveryMillis(5000)).build())
+                            .timingStrategy(withTiming(onEveryMillis(5000)).from(22, 0).to(5, 20))
                             .filter(new LocationAccuracyEventFilter(500))
                             .requestFactory(new DefaultLocationRequestFactory())
                             .permanentListener(LocationEventListener.class);

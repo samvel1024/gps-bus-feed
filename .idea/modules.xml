@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/gps-bus-feed.iml" filepath="$PROJECT_DIR$/gps-bus-feed.iml" />
-      <module fileurl="file://$PROJECT_DIR$/gps-bus-feed/gps-bus-feed-gps-bus-feed.iml" filepath="$PROJECT_DIR$/gps-bus-feed/gps-bus-feed-gps-bus-feed.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gps-bus-feed/gps-bus-feed.iml" filepath="$PROJECT_DIR$/gps-bus-feed/gps-bus-feed.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gps-bus-feed-app.iml" filepath="$PROJECT_DIR$/gps-bus-feed-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample-app/sample-app.iml" filepath="$PROJECT_DIR$/sample-app/sample-app.iml" />
     </modules>
   </component>

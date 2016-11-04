@@ -58,8 +58,8 @@ public class HoursWindowTiming implements RequestTiming {
     }
 
 
-    public static Builder from(int h, int m){
-        return new Builder(new TimeInDay(h, m));
+    public static Builder withTiming(RequestTiming timing){
+        return new Builder(timing);
     }
 
     public static class Builder{
@@ -68,21 +68,21 @@ public class HoursWindowTiming implements RequestTiming {
         TimeInDay to;
         RequestTiming timing;
 
-        private Builder(TimeInDay from){
-            this.from = from;
-        }
-
-        public Builder to(int h, int m){
-            this.to = new TimeInDay(h, m);
-            return this;
-        }
-
-        public Builder timing(RequestTiming timing){
+        private Builder(RequestTiming timing){
             this.timing = timing;
+        }
+
+        public Builder from(int h, int m){
+            this.from = new TimeInDay(h, m);
             return this;
         }
 
-        public HoursWindowTiming build(){
+        public HoursWindowTiming to(int h, int m){
+            this.to = new TimeInDay(h, m);
+            return build();
+        }
+
+        private HoursWindowTiming build(){
             return new HoursWindowTiming(from, to, timing);
         }
 
