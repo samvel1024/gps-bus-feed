@@ -23,7 +23,7 @@ public class TrackerConfigRepositoryTest {
 
     @Test
     public void testLocationTrackerSerialization() {
-        TrackerConfigRepository repository = new TrackerConfigRepository(context);
+        SerializableConfigRepository repository = new SerializableConfigRepository(context);
 
         TrackerConfig config = new TrackerConfig.Builder()
                 .requestFactory(new DefaultLocationRequestFactory())
@@ -31,7 +31,7 @@ public class TrackerConfigRepositoryTest {
                 .build();
 
         repository.save(config);
-        TrackerConfig deserializedConfig = repository.getSerializedInstance();
+        TrackerConfig deserializedConfig = repository.getInstance();
 
         Assert.assertNotSame(deserializedConfig, config);
         Assert.assertNotNull(deserializedConfig);

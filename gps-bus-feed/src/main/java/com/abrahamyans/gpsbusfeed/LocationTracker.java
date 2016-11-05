@@ -5,26 +5,30 @@ import android.content.Intent;
 import com.abrahamyans.gpsbusfeed.client.observer.ObserverRepository;
 import com.abrahamyans.gpsbusfeed.client.observer.SerializableBus;
 import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfig;
-import com.abrahamyans.gpsbusfeed.client.tracker.TrackerConfigRepository;
+import com.abrahamyans.gpsbusfeed.client.tracker.SerializableConfigRepository;
 
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * @author Samvel Abrahamyan
  */
+@Singleton
+public class LocationTracker {
 
-public class LocationTracker implements Serializable {
-
-    private TrackerConfigRepository trackerConfigRepository;
+    private SerializableConfigRepository trackerConfigRepository;
     private ObserverRepository observerRepository;
     private TrackerConfig trackerConfig;
     private PreferenceRepository preferenceRepository;
     private SerializableBus bus;
 
+    @Inject
     public LocationTracker(
             ObserverRepository observerRepository,
-            TrackerConfigRepository trackerConfigRepository,
+            SerializableConfigRepository trackerConfigRepository,
             SerializableBus bus, TrackerConfig trackerConfig,
             PreferenceRepository preferenceRepository
     ) {
@@ -48,8 +52,9 @@ public class LocationTracker implements Serializable {
     public void stopTracker() {
         if (!isTrackerRunning())
             throw new IllegalStateException("Tracker is not running");
-        preferenceRepository.setTrackerRunningState(false);
+        preferenceRepository.setTrackerNotRunning();
         trackerConfigRepository.delete();
+        observerRepository.delete();
     }
 
     public void startTracker(ConfigBuilder configBuilder) {
@@ -59,8 +64,7 @@ public class LocationTracker implements Serializable {
         trackerConfigRepository.save(trackerConfig);
         registerPermanentListeners(configBuilder);
         observerRepository.save(bus);
-
-        preferenceRepository.setTrackerRunningState(true);
+        preferenceRepository.setTrackerRunning();
         configBuilder.context.sendBroadcast(new Intent(configBuilder.context, AlarmBroadcastReceiver.class));
     }
 

@@ -22,7 +22,23 @@ import java.util.List;
 public class TrackerConfig implements Serializable {
 
     private static final long serialVersionUID = -480534867039443386L;
-    public static TrackerConfig NO_CONFIG = new TrackerConfig();
+    public static TrackerConfig NO_CONFIG = new TrackerConfig(){
+        private static final long serialVersionUID = -1738273124163855785L;
+        @Override
+        public RequestDate getNextRequestDate(Date lastRequestDate) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean isValidLocationEvent(Location location) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public LocationRequest createLocationRequest() {
+            throw new UnsupportedOperationException();
+        }
+    };
     private List<LocationEventFilter> filters;
     private RequestTiming timing;
     private LocationRequestFactory requestFactory;

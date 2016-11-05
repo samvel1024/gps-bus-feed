@@ -1,13 +1,11 @@
 package com.abrahamyans.gpsbusfeed.client;
 
-import java.io.Serializable;
-
 /**
  * @author Samvel Abrahamyan
  */
 
-public interface SingleInstanceRepository<T extends Serializable> {
-    T getSerializedInstance();
+public interface SingleInstanceRepository<T> {
+    T getInstance();
 
     void save(T t);
 

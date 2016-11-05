@@ -21,14 +21,14 @@ public class TrackerModule {
 
     @Provides
     @Singleton
-    public TrackerConfigRepository provideTrackerRepository() {
-        return new TrackerConfigRepository(context);
+    public SerializableConfigRepository provideTrackerRepository() {
+        return new SerializableConfigRepository(context);
     }
 
     @Provides
     @Singleton
-    public TrackerConfig provideTrackerConfig(TrackerConfigRepository trackerConfigRepository) {
-        TrackerConfig config = trackerConfigRepository.getSerializedInstance();
+    public TrackerConfig provideTrackerConfig(SerializableConfigRepository trackerConfigRepository) {
+        TrackerConfig config = trackerConfigRepository.getInstance();
         if (config != null) {
             return config;
         }

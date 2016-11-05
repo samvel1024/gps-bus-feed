@@ -30,7 +30,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Turn on tracker"
-        android:onClick="onTurnOnTracking"/>
+        android:onClick="onTurnOnTracker"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="onTurnOffTracker"
+        android:text="Stop tracker"/>
 
     <ListView
         android:layout_width="match_parent"

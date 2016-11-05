@@ -39,7 +39,7 @@ public class ObserverRepositoryTest {
                 bus.registerPermanent(new TestListener());
                 repository.save(bus);
 
-                SerializableBus deserializedBus = repository.getSerializedInstance();
+                SerializableBus deserializedBus = repository.getInstance();
                 TestableLocationEvent ev = new TestableLocationEvent(context, new Location("Test"), new Date());
                 deserializedBus.onLocationChanged(ev);
 
@@ -52,14 +52,10 @@ public class ObserverRepositoryTest {
 
     private static class TestableLocationEvent extends LocationChangedEvent {
 
-        private boolean isReceived = false;
+        boolean isReceived = false;
 
         public TestableLocationEvent(Context ctx, Location location, Date date) {
             super(ctx, location, date);
-        }
-
-        public void onReceived(){
-            isReceived = true;
         }
 
     }
@@ -70,7 +66,7 @@ public class ObserverRepositoryTest {
 
         @Subscribe
         public void onEvent(TestableLocationEvent ev) {
-            ev.onReceived();
+            ev.isReceived = true;
         }
     }
 }

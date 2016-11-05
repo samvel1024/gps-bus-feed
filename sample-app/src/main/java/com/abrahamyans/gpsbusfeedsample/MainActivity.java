@@ -13,7 +13,6 @@ import com.abrahamyans.gpsbusfeed.ConfigBuilder;
 import com.abrahamyans.gpsbusfeed.LocationTracker;
 import com.abrahamyans.gpsbusfeed.client.observer.event.LocationChangedEvent;
 import com.abrahamyans.gpsbusfeed.client.tracker.filter.LocationAccuracyEventFilter;
-import com.abrahamyans.gpsbusfeed.client.tracker.request.DefaultLocationRequestFactory;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -23,23 +22,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import static com.abrahamyans.gpsbusfeed.ConfigBuilder.withContext;
 import static com.abrahamyans.gpsbusfeed.client.tracker.time.EqualIntervalTiming.onEveryMillis;
-import static com.abrahamyans.gpsbusfeed.client.tracker.time.HoursWindowTiming.withTiming;
 
 public class MainActivity extends AppCompatActivity {
 
-    @Inject
-    LocationTracker tracker;
+    private LocationTracker tracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ((MyApplication) this.getApplicationContext()).getGpsBusFeedComponent().inject(this);
-
+        this.tracker = ((MyApplication) this.getApplicationContext()).getTracker();
     }
 
     @Override
@@ -55,17 +49,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void onTurnOnTracking(View view) {
+    public void onTurnOnTracker(View view) {
         if (!tracker.isTrackerRunning()) {
-            ConfigBuilder trackerConfig =
-                    withContext(this)
-                            .timingStrategy(withTiming(onEveryMillis(5000)).from(22, 0).to(5, 20))
+            ConfigBuilder trackerConfig = withContext(this)
+                            .timingStrategy(onEveryMillis(5000))
                             .filter(new LocationAccuracyEventFilter(500))
-                            .requestFactory(new DefaultLocationRequestFactory())
                             .permanentListener(LocationEventListener.class);
             tracker.startTracker(trackerConfig);
+            Toast.makeText(this, "Tracker started", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Tracker is already running", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void onTurnOffTracker(View v){
+        if (tracker.isTrackerRunning()){
+            tracker.stopTracker();
+            Toast.makeText(this, "Tracker stopped", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Tracker is not running", Toast.LENGTH_SHORT).show();
         }
     }
 

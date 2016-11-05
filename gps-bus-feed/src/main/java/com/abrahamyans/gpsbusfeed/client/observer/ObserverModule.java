@@ -28,7 +28,7 @@ public class ObserverModule {
     @Provides
     @Singleton
     public SerializableBus provideEventBus(ObserverRepository repository) {
-        SerializableBus deserialized = repository.getSerializedInstance();
+        SerializableBus deserialized = repository.getInstance();
         if (deserialized != null) {
             return deserialized;
         }

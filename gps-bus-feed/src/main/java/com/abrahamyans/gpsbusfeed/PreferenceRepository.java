@@ -25,8 +25,12 @@ public class PreferenceRepository {
         return preferences.getBoolean("tracker_enabled", false);
     }
 
-    public void setTrackerRunningState(boolean state) {
-        preferences.edit().putBoolean("tracker_enabled", state).apply();
+    public void setTrackerRunning() {
+        preferences.edit().putBoolean("tracker_enabled", true).apply();
+    }
+
+    public void setTrackerNotRunning(){
+        preferences.edit().clear().apply();
     }
 
     public Date getLastRequestDate() {
