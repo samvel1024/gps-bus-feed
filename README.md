@@ -45,7 +45,6 @@ Configure and start the GPS tracker
                     .requestFactory(new DefaultLocationRequestFactory())
                     .filter(new LocationAccuracyEventFilter(500))
                     .permanentListener(LocationEventListener.class));
-            Toast.makeText(this, "Tracker started", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Tracker is already running", Toast.LENGTH_SHORT).show();
         }
