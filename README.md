@@ -43,7 +43,6 @@ Configure and start the GPS tracker
             tracker.startTracker(withContext(this)
                     .timingStrategy(withTiming(onEveryMillis(5000)).from(10, 20).to(23,0))
                     .requestFactory(new DefaultLocationRequestFactory())
-
                     .filter(new LocationAccuracyEventFilter(500))
                     .permanentListener(LocationEventListener.class));
             Toast.makeText(this, "Tracker started", Toast.LENGTH_SHORT).show();
