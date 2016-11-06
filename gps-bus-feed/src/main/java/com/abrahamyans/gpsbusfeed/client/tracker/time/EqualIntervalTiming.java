@@ -22,7 +22,8 @@ public class EqualIntervalTiming implements RequestTiming {
 
     @Override
     public RequestDate nextRequestDate(Date lastRequestDate) {
-        lastRequestDate = lastRequestDate == null ? new Date() : lastRequestDate;
+        if (lastRequestDate == null)
+            return RequestDate.IMMEDIATELY;
         Calendar cal = Calendar.getInstance();
         cal.setTime(lastRequestDate);
         cal.add(Calendar.MILLISECOND, deltaMillis);

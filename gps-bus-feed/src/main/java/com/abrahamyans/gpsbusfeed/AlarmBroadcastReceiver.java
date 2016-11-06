@@ -36,20 +36,17 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             return;
         }
 
-        context.startService(new Intent(context, LocationService.class));
         TrackerConfig config = currentTracker.getRunningTrackerConfig();
         Date lastRequestDate = currentTracker.getLastRequestDate();
         Date nextRequestDate = extractDate(config.getNextRequestDate(lastRequestDate));
-        Log.d(
-                TAG,
-                String.format("lastRequestDate: %s, nextRequestDate: %s, currentDate: %s",
-                        lastRequestDate,
-                        nextRequestDate,
-                        new Date())
-        );
+        currentTracker.setLastRequestDate(nextRequestDate);
+
+        if (lastRequestDate != null){
+            context.startService(new Intent(context, LocationService.class));
+        }
+
         if (nextRequestDate != null) {
-            scheduleLocationBroadcast(context, nextRequestDate);
-            currentTracker.setLastRequestDate(nextRequestDate);
+            scheduleNextLocationBroadcast(context, nextRequestDate);
         }
     }
 
@@ -64,7 +61,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         return null;
     }
 
-    private void scheduleLocationBroadcast(Context context, Date date) {
+    private void scheduleNextLocationBroadcast(Context context, Date date) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent gpsTrackerIntent = new Intent(context, AlarmBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, 0);

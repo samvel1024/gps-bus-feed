@@ -62,6 +62,7 @@ public class LocationService extends Service implements
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (processingLocation) {
             Log.w(TAG, "Skipping location request, service is busy processing location");
+            disconnect();
         } else {
             this.wakeLock = intent;
             locationApi.connect();
