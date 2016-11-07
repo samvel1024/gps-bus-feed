@@ -1,1 +1,1 @@
-include ':sample-app', ':gps-bus-feed'
+include ':sample', ':library'
